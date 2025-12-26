@@ -1,0 +1,58 @@
+https://tellingstorieswithdata.com/21-python_essentials.html#fig-vscodesetup-c
+
+(1) Python essentials
+# Terminal/Shell
+- Terminal: text-based interface where you type commands to interact with your computer.
+- Shell: program that interprets these commands.
+
+(2) Basic commands
+# Printing messages (f-string literals)
+- e.g., print(f"Hello, {name}!") 	# prints "Hello, name!" to the terminal (f-string literal)
+
+(3) Shell commands
+# Shell commands are used to interact with the operating system.
+# They can be executed in various shell environments, such as PowerShell, CMD, Bash, Zsh, etc.
+# Shell commands and their examples (syntax may vary by shell type):
+Shell Type:					Platform:			Example Syntax:
+PowerShell					Windows				Get-ChildItem, ls, python
+CMD (Command Prompt)		Windows				dir, cd, copy
+Bash (e.g. Git Bash)		Linux/macOS			ls, cd, ./run.sh
+Zsh / Fish					Unix shells			Like Bash, with extras
+R, Python shells			Language REPLs		For writing in R or Python interactively
+
+(4) Managing Python environments
+# Python environments: isolated spaces for running Python code with specific packages.
+# They help avoid conflicts between different projects' dependencies.
+
+(5) Virtual environments
+# Virtual environments: self-contained directories that contain a Python interpreter and installed packages.
+# They allow you to manage dependencies for different projects separately.
+
+(6) Set GitHub repo directory
+# Set the directory to your GitHub repository where you want to work on your Python project.
+- cd "C:\Users\Mcowa\OneDrive\Documents\GitHub\tswd_toronto_crime" 	# change directory to GitHub repo
+
+(7) uv: Python package manager
+# Command-line tool for managing Python packages and virtual environments.
+- uv init (e.g., "toronto_crime") 			# creates project-specific virtual environment (.venv appears)
+											# project’s dependencies (polars, numpy, etc.) installed and isolated.
+- uv pip install --upgrade uv				# upgrade uv to the latest version
+- uv pip install [package name]				# install packages (e.g., polars, numpy, etc.)
+											# polars: manipulating dfs, similar to pandas; https://pola.rs/
+											# numpy: simulating data (numbers/arrays); https://numpy.org/
+											# datetime: similar to lubridate (R); https://docs.python.org/3/library/datetime.html
+											# pydantic: for validation (checking rows, etc.); https://docs.pydantic.dev/latest/
+- uv pip uninstall [package name]			# uninstall packages (e.g., polars, numpy, etc.)
+- uv pip show [package name]				# show details of a specific package (e.g., polars, numpy, etc.)
+- uv pip list								# list all installed packages in the current environment
+- uv pip install --upgrade [package name]	# upgrade packages (e.g., polars, numpy, etc.)
+- uv pip install [package name] --dev		# add dev packages (e.g., pytest, black, etc.)
+
+(8) Main Functions
+# Wrap all code into a function def_main().
+- Use `if __name__ == "__main__": to call the function when the script is run directly.
+
+(9) paper.qmd
+# paper.qmd: Quarto Markdown file.
+- [#sec-paper-section]: Call with "@" (useful in telegraphing paragraph, etc.)
+
