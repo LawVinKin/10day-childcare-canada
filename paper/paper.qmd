@@ -3,14 +3,18 @@ title: "Childcare as Economic Infrastructure"
 subtitle: "Federal-Provincial Agreements and Maternal Labour Force Participation in Canada"
 author: 
   - Lawrence Vincent King
-thanks: "Code and data are available at: [https://github.com/LawVinKin/CanadaChildcareMaternalLabour)."
+thanks: "I hereby thank Professor Lauren Jones for their guidance of this project. No ethics approval was required for this research as the data used are restricted to publicly available secondary data. The author declares no conflicts of interest. No funding was received for this project. Code and data are available at: https://github.com/LawVinKin/CanadaChildcareMaternalLabour."
 date: today
 date-format: long
-abstract: "This paper evaluates the impact of Canada's federal-provincial $10-per-day childcare agreements (signed 2021-2023) on maternal labour force participation. Using a stacked difference-in-differences design and monthly Labour Force Survey microdata (April 2019-July 2025), I compare labour market outcomes for women aged 25-44 with a youngest child under six across provinces, leveraging the staggered implementation of the policy. The analysis finds no statistically significant average effect on labour force participation. The point estimate for the overall average treatment effect is 0.0125 (SE = 0.0131, p = 0.357). Heterogeneous effects by demographic characteristics (e.g., lone parenthood, education) and baseline childcare capacity (2019) are also estimated and statistically insignificant. These results suggest limited short-to-medium-term labour supply effects from the policy rollout through mid-2025, possibly due to lack of available childcare capacity despite reduced fees."
+abstract: "This paper evaluates the impact of Canada's federal-provincial $10-per-day childcare agreements (signed 2021-2023) on maternal labour force participation. Using a stacked difference-in-differences design and monthly Labour Force Survey microdata (April 2019-July 2025), I compare labour market outcomes for women aged 25-44 with a youngest child under six across provinces, leveraging the staggered implementation of the policy. The analysis finds no statistically significant average effect on labour force participation. The point estimate for the overall average treatment effect is 0.0120 (SE = 0.0135, p = 0.373). Heterogeneous effects by demographic characteristics (e.g., lone parenthood, education) and baseline childcare capacity (2019) are also estimated and statistically insignificant. These results suggest limited short-to-medium-term labour supply effects from the policy rollout through mid-2025, possibly due to lack of available childcare capacity despite reduced fees."
 keywords: "childcare policy; labour force participation; difference-in-differences; federalism; maternal employment; public investment"
-format: pdf
+format: 
+  pdf:
+    mainfont: "Times New Roman"
+    sansfont: "Times New Roman"
 number-sections: true
 bibliography: references.bib
+csl: ../other/styles/canadian-public-policy.csl
 ---
 
 ```{r}
@@ -19,8 +23,6 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(knitr)
-library(kableExtra)
 ```
 
 
@@ -30,7 +32,7 @@ In November 2021, Canada embarked on what could be described as its most signifi
 
 As previously reported by the OECD regarding Canada's Early Childhood Education and Care (ECEC), "ensuring that fees to parents do not make ECEC prohibitively expensive to families is a key challenge in several provinces and territories" [@schleicher2017canada, 1]. The federal government's plan to tackle this challenge, mainly through the 2021 budget, was guided by a constitutional vision that respected the division of powers between the federal and provincial orders of government through respective bilateral agreements with provinces and territories. These bilateral agreements created a level of flexibility that has historically been characteristic of childcare agreements in Canada [@beland2021retrenchment, 817-19].
 
-In line with increasingly available international evidence yet contrary to the policy’s stated goal of increasing maternal employment, this paper finds no statistically significant effect of the childcare subsidy program on maternal labour force participation in Canada. Using a stacked difference-in-differences approach with 2021 as the baseline year, the estimated average treatment effect on the treated (ATT) is 0.0125 (SE = 0.0131, p = 0.357). This null finding contributes to the growing international body of evidence which point to overestimations in previous studies, as well as the context-dependent nature of the relationship between childcare subsidies and maternal labour force participation.
+In line with increasingly available international evidence yet contrary to the policy's stated goal of increasing maternal employment, this paper finds no statistically significant effect of the childcare subsidy program on maternal labour force participation in Canada. Using a stacked difference-in-differences approach with 2021 as the baseline year, the estimated average treatment effect on the treated (ATT) is 0.0120 (SE = 0.0135, p = 0.373). This null finding contributes to the growing international body of evidence which points to overestimations in previous studies, as well as the context-dependent nature of the relationship between childcare subsidies and maternal labour force participation.
 
 The paper proceeds as follows: @sec-data details the data and the methodology, specifically discussing the stacked DiD framework that addresses some of the limitations of previous Two-Way Fixed Effect (TWFE) approaches. @sec-results presents the main findings of the paper, demonstrating the absence of a statistically significant effect across the event window. @sec-discussion discusses the policy implications of this null finding, outlines policy recommendations, and concludes the paper. Overall, this paper contributes to the literature by being the first evaluation of Canada’s $10-a-day childcare subsidy program across all ten provinces and three territories several years after its implementation in relation to its specified goals, further highlighting that the relationship between maternal employment and childcare affordability is much more complex than what policymakers had anticipated.
 
@@ -42,7 +44,9 @@ Comparisons across provinces, however, have revealed varied impacts. In Québec,
 
 The bilateral agreements enabling the national $10-per-day program reflect the development of Canada's decentralized fiscal federalism, where conditional transfers shape provincial social policy without fully eroding their autonomy [@tombe2023challenges]. Recent shifts toward fixed contributions and framework agreements leverage federal funding to align provincial actions with national goals, as seen in childcare [@graefe2006federalism; @schnabel2022helping].
 
-Internationally, however, observations have reached more nuanced and context-specific conclusions. A study of Norway's universal childcare subsidies conducted by @havnes2011money corrected previous research that had come to believe that the greater affordability and availability of childcare across Norway was a significant driving force for the increase in its maternal employment rate. Using a difference-in-differences approach that leverages the temporal and spatial variation of the policy across Norway, the authors concluded that, despite the strong correlation between the childcare policy and increases in maternal employment rates, there was little to any causal effects from the former onto the latter neither in the main analysis nor in analyses separated by age, education, and the number of children [@havnes2011money, 1456]. The authors observe a major crowding out of informal childcare arrangements, as they are gradually replaced by subsidized childcare spaces following the subsidy [@havnes2011money, 1456]. In similar vein, the significant findings of @lovasz2018childcare in their study of Hungary's subsidized childcare system, showing a 24 percent increase in maternal labour supply, is moderated by their cautioned warning that maternal labour participation is also impacted by various institutional factors, including the length of parental leave, the availability of flexible working arrangements or lack thereof, as well as cultural views on maternal employment as a whole. Accordingly, the success of childcare programs to increase maternal employment can be impacted by the policy itself and the context where it has been implemented. 
+Internationally, however, observations have reached more nuanced and context-specific conclusions. A study of Norway's universal childcare subsidies conducted by @havnes2011money corrected previous research that had come to believe that the greater affordability and availability of childcare across Norway was a significant driving force for the increase in its maternal employment rate. Using a difference-in-differences approach that leverages the temporal and spatial variation of the policy across Norway, the authors concluded that, despite the strong correlation between the childcare policy and increases in maternal employment rates, there was little to any causal effects from the former onto the latter neither in the main analysis nor in analyses separated by age, education, and the number of children [@havnes2011money, 1456]. The authors observe a major crowding out of informal childcare arrangements, as they are gradually replaced by subsidized childcare spaces following the subsidy [@havnes2011money, 1456].
+
+In similar vein, the significant findings of @lovasz2018childcare in their study of Hungary's subsidized childcare system, showing a 24 percent increase in maternal labour supply, is moderated by their cautioned warning that maternal labour participation is also impacted by various institutional factors, including the length of parental leave, the availability of flexible working arrangements or lack thereof, as well as cultural views on maternal employment as a whole. Accordingly, the success of childcare programs to increase maternal employment can be impacted by the policy itself and the context where it has been implemented. 
 
 Another crucial factor to consider is the methodological evolution of childcare research over time. As detailed by @akgunduz2017child in their meta-analysis of 36 peer-reviewed articles and working papers on childcare, some of the variance in the responsiveness (elasticity) of maternal labour force participation can be explained due to more rigorous and improved methodology, as well as the increased prevalence of part-time employment—both of which have reduced the responsiveness of maternal labour force participation over time (130). As such, this study will use the stacked difference-in-differences model with relation to the Canadian economy which has, based on the most recent statistics, 18.1 percent part-time employment [@statisticscanada2022proportion].
 
@@ -55,15 +59,15 @@ Heterogeneous effects are also evident internationally, with stronger responses 
 
 ## Sample
 
-This study uses the microdata from Statistics Canada’s Labour Force Survey (LFS hereafter) that is conducted monthly through its Public Use Microdata Files (PUMF), from April 2019 to July 2025. Data are from the Labour Force Survey (LFS) Public Use Microdata Files (PUMF), obtained through the Borealis Canadian Social Sciences Data Repository. Replication materials will be made available upon request.
+This study uses microdata from Statistics Canada's Labour Force Survey (LFS) Public Use Microdata Files (PUMF), from April 2019 to July 2025, obtained through the Borealis Canadian Social Sciences Data Repository. Replication materials will be made available upon request.
 
-The LFS is one of Canada's main surveys of labour market statistics that is conducted using a stratified multi-stage design reliable survey data while ensuring geographic representation [@statisticscanada2025labour]. For this analysis, the sample has been restricted to women aged 25 to 44 with the youngest child under six years of age to focus on assessing the demographic that would most likely be impacted by childcare subsidies, discarding those whose labour supply would not be as dependent on childcare policy. The final analytical sample consists of 352,851 observations across the ten provinces and three territories.
+The LFS is one of Canada's main surveys of labour market statistics that is conducted using a stratified multi-stage design to provide reliable survey data while ensuring geographic representation [@statisticscanada2025labour]. For this analysis, the sample has been restricted to women aged 25 to 44 with the youngest child under six years of age to focus on assessing the demographic that would most likely be impacted by childcare subsidies, discarding those whose labour supply would not be as dependent on childcare policy. The final analytical sample consists of 352,851 observations across the ten provinces and three territories.
 
 ## Outcome and Treatment Variables
 
 The primary outcome variable is the labour force participation status, coded as in_lfp. An individual is coded as participating in the labour force (in_lfp = 1) if they are employed (either at work or absent from work) or unemployed during the survey reference week, as those that are statistically referred to as unemployed are nevertheless considered as part of the labour force since they are still seeking employment. Conversely, an individual is coded as not participating in the labour force (in_lfp = 0) if neither of the abovementioned conditions apply to them. This binary variable was constructed from the standard LFS labour force status variable using Statistics Canada's standard definitions.
 
-The treatment assignment is defined by the provincial bilateral agreements with the federal government to implement the $10-a-day childcare program. The treatment begins in the month that each province has signed its agreement. Since provinces have signed the agreements at different times – the earliest with British Columbia in November 2021 and Ontario last in March 2023 – a staggered rollout across jurisdiction has taken place. Critically, this variation in timing builds the structure necessary for causal inference.  
+The treatment assignment is defined by the provincial bilateral agreements with the federal government to implement the $10-a-day childcare program. The treatment begins in the month that each province has signed its agreement. Since provinces have signed the agreements at different times – the earliest with British Columbia in November 2021 and Ontario last in March 2023 – a staggered rollout across jurisdictions has taken place. Critically, this variation in timing builds the structure necessary for causal inference.  
 
 ## Methodology
 
@@ -81,13 +85,14 @@ $$\text{in\_lfp}_{ipt} = \alpha + \beta_t + \gamma_p + \delta_t(\text{Treated}_{
 
 where $\beta_t$ are time fixed effects, $\gamma_p$ are province fixed effects, $\text{Treated}_{pt}$ is an indicator for provinces that have signed childcare agreements, $\text{Post}_t$ indicates periods after signing the agreement, and $X_{ipt}$ is a vector of control variables, including age group and education level.
 
-This approach is implemented through R's did package, versions 4.3.1 and 2.4.0 respectively. In the preparation of this study, Qwen's Qwen3-Coder was used for coding assistance, and Qwen3-Max was used to ensure linguistic clarity, logical flow, and accessibility for a broader audience as required by the journal's guidelines. All analysis was conducted between September and November of 2025. All content in this manuscript has been reviewed, revised, and personally written by the author. The author hereby confirms the fulfillment of his personal responsibility to verify the validity and accuracy of all information presented in this paper.
-
 ## Moderating Factors
 
-The heterogeneous treatment effects across several factors that may moderate the childcare policy’s impact have been included in the analysis. First, family structure is taken into account to account for the difference between mothers who are single parents and those that are a couple, using the LFS variable efamtype. It is important to consider the family structure since single mothers, since they are single, have limited capacity to refuse to be a part of the labour force, whereas women in couple families face a more open range of possibilities. For example, if the spouse has an economically rewarding occupation, the mother may choose not to be a part of the labour force and instead focus on various important, yet unpaid responsibilities associated with running a household. Considering the opposite situation, a family may choose to only have one spouse working since the cost of sending the child or the children to a childcare facility would be more than what the mother would earn in the labour market, thus saving the family money. 
-Second, the education level of women has been considered as a moderating variable, comparing with bachelor’s degrees or higher with those with a high school education or less. This moderating variable serves two functions. First, it may be used as a proxy for income due to the unavailability of an annual income variable in the LFS datasets. Second, it may be used as a proxy for assessing the socioeconomic status of mothers, allowing insight into the possibility that the policy has a greater impact for those who have not been, due to various socioeconomic reasons, able to obtain post-secondary education and those who have. 
+The heterogeneous treatment effects across several factors that may moderate the childcare policy’s impact have been included in the analysis. First, family structure is considered to capture the difference between mothers who are single parents and those in couples, using the LFS variable efamtype. It is important to consider family structure since single mothers have limited capacity to exit the labour force, whereas women in couple families face a broader range of possibilities. For example, if the spouse has an economically rewarding occupation, the mother may choose not to be a part of the labour force and instead focus on various important, yet unpaid responsibilities associated with running a household. Considering the opposite situation, a family may choose to only have one spouse working since the cost of sending the child or the children to a childcare facility would be more than what the mother would earn in the labour market, thus saving the family money.
+
+Second, the education level of women has been considered as a moderating variable, comparing mothers with bachelor’s degrees or higher with those with a high school education or less. This moderating variable serves two functions. First, it may be used as a proxy for income due to the unavailability of an annual income variable in the LFS datasets. Second, it may be used as a proxy for assessing the socioeconomic status of mothers, allowing insight into the possibility that the policy has a greater impact for those who have not been, due to various socioeconomic reasons, able to obtain post-secondary education and those who have. 
+
 Third, age has been considered as a moderating factor, since it can provide insight into the life-stage of the mothers and also their potential careers. Given that relatively older mothers are more likely to have careers that demand their full-time attention, it is reasonable to expect that the childcare policy would impact their labour market supply curve very little. In contrast, younger mothers who have not yet established a career may greatly benefit from the childcare policy since it would allow them to adjust the hours they are willing to work given that the childcare policy would make childcare more affordable for them. 
+
 Fourth, given the possible importance of childcare availability, an attempt was made to incorporate the childcare spaces available from the Childcare Resource and Research Unit's 2024 report [@friendly2025interim], using 2019 capacity numbers as the baseline and comparing the impact of the policy on low-capacity vs. high-capacity provinces. However, the stacked difference-in-differences estimation for the high-capacity group failed to produce standard errors, resulting in the exclusion of this moderating variable from the formal analysis. This failure likely reflects the homogeneity in treatment timing among high-capacity provinces (all implemented agreements in the same calendar year), which violates the assumptions required for the stacked difference-in-differences estimator. A deeper discussion of the possible reasons behind the failure of the high-capacity group to produce standard errors is included in the Results section. In the interest of transparency, however, the results from the low-capacity group are presented alongside the demographic heterogeneity analysis.
 
 ## Robustness Checks
@@ -101,160 +106,90 @@ Finally, heterogeneous effects, as outlined earlier, have been assessed in key d
 
 ## Average Treatment Effect
 
-The main finding of the stacked difference-in-difference analysis of the impact of Canada's $10-a-day childcare agreements on maternal labour force participation is displayed in @tbl-att-results. The estimated average treatment effect on the treated (ATT) is 0.0125 (SE = 0.0131, p = 0.357), indicating that, had the policy been found statistically significant, it would have been associated with a very modest increase of 1.2 percentage points. However, given that p = 0.357 > 0.05, the results are not statistically significant at the 5 percent significance level. It is also worth noting that the confidence interval is between -0.0136 and 0.0376, which includes the number zero. As such, this analysis suggests that the childcare subsidy's intended goal of increasing maternal employment was not statistically significant during the observation period (April 2019 to July 2025).
-
-```{r}
-#| echo: false
-#| label: tbl-att-results
-#| tbl-cap: "Average Treatment Effect on the Treated (ATT) for Labour Force Participation"
-
-att_results <- tibble(
-  Coefficient = 0.0125,
-  `Std. Error` = 0.0131,
-  `P-Value` = 0.357,
-  `95% CI Lower` = -0.0136,
-  `95% CI Upper` = 0.0376
-)
-
-kable(att_results,
-      digits = 4,
-      align = "ccccc") |>
-  kable_styling(latex_options = c("hold_position")) |>
-  footnote(general = "Author's calculations using stacked difference-in-differences estimation on Statistics Canada Labour Force Survey microdata, April 2019-July 2025.")
-```
+The main finding of the stacked difference-in-difference analysis of the impact of Canada's $10-a-day childcare agreements on maternal labour force participation is as follows: the estimated average treatment effect on the treated (ATT) is 0.0120 (SE = 0.0135, p = 0.373), indicating that, had the policy been found statistically significant, it would have been associated with a very modest increase of 1.2 percentage points. However, given that p = 0.373 > 0.05, the results are not statistically significant at the 5 percent significance level. It is also worth noting that the confidence interval is between -0.0144 and 0.0385, which includes the number zero. As such, this analysis suggests that the childcare subsidy's intended goal of increasing maternal employment was not statistically significant during the observation period (April 2019 to July 2025).
 
 ## Dynamic Effects Over Time
 
-@fig-event-study presents the event study plot of the dynamic treatment effects, with estimated coefficients for each month relative to policy implementation, allowing analysis from 11 months before to 11 months after the treatment. As shown in the figure, there are no statistically significant effects in any month relative to the treatment period. The coefficients fluctuate around zero and the confidence intervals include the value of zero consistently. The precise numerical estimates for each month are outlined in @tbl-dynamic-effects. A noteworthy factor is the lack of significant pre-trends in the months leading up to the policy implementation, which supports the validity of this study's identification strategy.
+@fig-event-study presents the event study plot of the dynamic treatment effects, with estimated coefficients for each month relative to policy implementation. As shown in the figure, the coefficients fluctuate around zero and the confidence intervals generally include the value of zero. While the coefficient at month 7 post-treatment reaches nominal statistical significance (p = 0.0015), this isolated result should be interpreted with caution: with multiple hypothesis tests across the event window, some coefficients will appear significant by chance alone. The absence of a consistent pattern of significant effects in surrounding months and the lack of theoretical justification for an effect emerging specifically at month 7 suggest this is likely a spurious finding rather than evidence of a delayed policy effect. A noteworthy factor is the lack of significant pre-trends in the months leading up to the policy implementation, which supports the validity of this study's identification strategy.
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 #| label: fig-event-study
-#| fig-cap: "Dynamic Treatment Effects: Event Study Plot"
+#| fig-cap: "Notes: Authors' calculations using Labour Force Survey microdata (April 2019–July 2025). Points represent estimated ATT for each month relative to provincial agreement signing. Shaded region shows 95% confidence intervals. The vertical dashed line indicates the treatment period (month 0)."
 #| fig-width: 8
-#| fig-height: 5
+#| fig-height: 5.5
 
-# Event study coefficients (months -11 to +11 relative to treatment)
-event_study_data <- tibble(
-  month = -11:11,
-  estimate = c(-0.015, -0.008, 0.005, -0.012, 0.003, -0.007, 0.010, -0.005,
-               0.008, -0.003, 0.002, 0.0125, 0.018, 0.005, -0.008, 0.012,
-               0.003, -0.010, 0.015, 0.007, -0.005, 0.010, 0.008),
-  se = rep(0.013, 23),
-  ci_lower = estimate - 1.96 * se,
-  ci_upper = estimate + 1.96 * se
-)
+library(showtext)
+showtext_auto()
+font_add("Times New Roman", regular = "/System/Library/Fonts/Supplemental/Times New Roman.ttf")
 
-ggplot(event_study_data, aes(x = month, y = estimate)) +
+event_study_data <- read_csv("../output/results/stacked_did_dynamic_effects.csv", show_col_types = FALSE) |>
+  filter(rel_time_num >= -11 & rel_time_num <= 11) |>
+  filter(!is.na(se))
+
+ggplot(event_study_data, aes(x = rel_time_num, y = estimate)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
   geom_vline(xintercept = -0.5, linetype = "dashed", color = "red", alpha = 0.5) +
-  geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.2, fill = "steelblue") +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "steelblue") +
   geom_point(color = "steelblue", size = 2) +
   geom_line(color = "steelblue") +
-  labs(x = "Months Relative to Treatment",
-       y = "ATT Estimate") +
   scale_x_continuous(breaks = seq(-10, 10, 2)) +
-  theme_minimal() +
-  theme(panel.grid.minor = element_blank())
-```
-
-```{r}
-#| echo: false
-#| label: tbl-dynamic-effects
-#| tbl-cap: "Dynamic Treatment Effects by Month Relative to Policy Implementation"
-
-dynamic_effects <- tibble(
-  `Months Relative to Treatment` = -11:11,
-  Estimate = c(-0.015, -0.008, 0.005, -0.012, 0.003, -0.007, 0.010, -0.005,
-               0.008, -0.003, 0.002, 0.0125, 0.018, 0.005, -0.008, 0.012,
-               0.003, -0.010, 0.015, 0.007, -0.005, 0.010, 0.008),
-  `Std. Error` = rep(0.013, 23)
-) |>
-  mutate(`P-Value` = round(2 * (1 - pnorm(abs(Estimate / `Std. Error`))), 3))
-
-kable(dynamic_effects,
-      digits = 4,
-      align = "cccc") |>
-  kable_styling(latex_options = c("hold_position", "scale_down"))
+  labs(title = "Dynamic Treatment Effects on Maternal Labour Force Participation",
+       x = "Months Relative to Treatment",
+       y = "ATT Estimate") +
+  theme_minimal(base_family = "Times New Roman") +
+  theme(panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 12, face = "bold"))
 ```
 
 In the absence of anticipation effects before treatment and the consistent null effects after implementation, the conclusion that the childcare subsidy policy did not meaningfully increase maternal labour force participation during the study period is hereby confirmed. Further, there is no evidence from the dynamic analysis suggesting that effects might gradually emerge over time, or that initial positive effects have faded after some time.
 
 ## Heterogeneous Effects
 
-To assess the possible variation of policy effects on relevant population segments, the heterogeneous treatment effects across three main demographic dimensions were studied. @tbl-heterogeneous-effects presents the estimates for each subgroup, and @fig-heterogeneous-effects visualizes these subgroup effects with confidence intervals.
+To assess the possible variation of policy effects on relevant population segments, the heterogeneous treatment effects across three main demographic dimensions were studied. @fig-heterogeneous-effects visualizes these subgroup effects with confidence intervals.
 
 ```{r}
 #| echo: false
-#| label: tbl-heterogeneous-effects
-#| tbl-cap: "Heterogeneous Treatment Effects by Demographic Subgroup"
-
-hetero_effects <- tibble(
-  Subgroup = c("Family Structure", "", "Education Level", "", "Age Group", "", "Childcare Capacity"),
-  Category = c("Lone Parents", "Non-Lone Parents",
-               "Higher Education (Bachelor's+)", "Lower Education (HS or less)",
-               "Younger (25-34)", "Older (35-44)",
-               "Low Capacity Provinces"),
-  Estimate = c(0.0050, 0.0130, 0.0018, 0.0203, 0.0199, 0.0015, 0.0178),
-  `Std. Error` = c(0.0243, 0.0125, 0.0214, 0.0170, 0.0331, 0.0167, 0.0119),
-  `P-Value` = c(0.834, 0.294, 0.931, 0.234, 0.549, 0.931, 0.134)
-)
-
-kable(hetero_effects,
-      digits = 4,
-      align = "llccc") |>
-  kable_styling(latex_options = c("hold_position")) |>
-  footnote(general = "High-capacity province group failed to produce standard errors due to homogeneous treatment timing.")
-```
-
-```{r}
-#| echo: false
+#| warning: false
+#| message: false
 #| label: fig-heterogeneous-effects
-#| fig-cap: "Heterogeneous Treatment Effects by Demographic Subgroup"
+#| fig-cap: "Notes: Authors' calculations using Labour Force Survey microdata (April 2019–July 2025). Points represent estimated ATT for each subgroup. Horizontal bars show 95% confidence intervals. The vertical dashed line indicates zero effect."
 #| fig-width: 8
-#| fig-height: 5
+#| fig-height: 5.5
 
-hetero_plot_data <- tibble(
-  category = c("Lone Parents", "Non-Lone Parents",
-               "Higher Education", "Lower Education",
-               "Younger (25-34)", "Older (35-44)",
-               "Low Capacity"),
-  group = c("Family", "Family", "Education", "Education", "Age", "Age", "Capacity"),
-  estimate = c(0.0050, 0.0130, 0.0018, 0.0203, 0.0199, 0.0015, 0.0178),
-  se = c(0.0243, 0.0125, 0.0214, 0.0170, 0.0331, 0.0167, 0.0119)
-) |>
-  mutate(
-    ci_lower = estimate - 1.96 * se,
-    ci_upper = estimate + 1.96 * se,
-    category = factor(category, levels = rev(category))
-  )
+hetero_plot_data <- read_csv("../output/results/stacked_did_results_summary.csv", show_col_types = FALSE) |>
+  filter(subgroup != "Full Sample") |>
+  mutate(subgroup = factor(subgroup, levels = rev(unique(subgroup))))
 
-ggplot(hetero_plot_data, aes(x = estimate, y = category, color = group)) +
+ggplot(hetero_plot_data, aes(x = estimate, y = subgroup)) +
   geom_vline(xintercept = 0, linetype = "dashed", color = "gray50") +
   geom_errorbarh(aes(xmin = ci_lower, xmax = ci_upper), height = 0.2) +
-  geom_point(size = 3) +
-  labs(x = "ATT Estimate",
-       y = "",
-       color = "Dimension") +
-  theme_minimal() +
-  theme(legend.position = "bottom")
+  geom_point(size = 3, color = "steelblue") +
+  labs(title = "Heterogeneous Treatment Effects by Demographic Subgroup",
+       x = "ATT Estimate",
+       y = "") +
+  theme_minimal(base_family = "Times New Roman") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, size = 12, face = "bold"))
 ```
 
-Regarding family structure, the analysis reveals an estimated effect of 0.005 percentage points for lone parents (SE = 0.0243, p = 0.834) compared to the 0.013 percentage points for non-lone parents (SE = 0.0125, p = 0.294). This suggests a slightly larger effect for mothers in coupled families, though neither estimate is statistically significant.
+Regarding family structure, the analysis reveals an estimated effect of 0.0051 percentage points for lone parents (SE = 0.0246, p = 0.836) compared to the 0.0131 percentage points for non-lone parents (SE = 0.0122, p = 0.284). This suggests a slightly larger effect for mothers in coupled families, though neither estimate is statistically significant.
 
-Regarding education level, mothers with higher education, measured as a bachelor's degree or higher, show an estimated effect of 0.0018 percentage points (SE = 0.0214, p = 0.931), while mothers with lower education show a larger but still statistically insignificant effect of 0.0203 percentage points (SE = 0.0170, p = 0.234).
+Regarding education level, mothers with higher education, measured as a bachelor's degree or higher, show an estimated effect of 0.0018 percentage points (SE = 0.0210, p = 0.930), while mothers with lower education show a larger but still statistically insignificant effect of 0.0203 percentage points (SE = 0.0194, p = 0.295).
 
-In similar vein, younger mothers (25-34) show an estimated effect of 0.0199 percentage points (SE = 0.0331, p = 0.549) while older mothers (35-44) show an effect of 0.0015 percentage points (SE = 0.0167, p = 0.931).
+In similar vein, younger mothers (25-34) show an estimated effect of 0.0199 percentage points (SE = 0.0336, p = 0.555) while older mothers (35-44) show an effect of 0.0015 percentage points (SE = 0.0171, p = 0.932).
 
-The possible variance of effect across baseline childcare capacity in 2019 was also studied using the Childcare Resource and Research Unit's data. In doing so, this study categorized the provinces as having "low capacity" or "high capacity" based on the median number of childcare spaces for children aged zero to five. The analysis found an estimated effect of 0.0178 percentage points for provinces with low baseline capacity (SE = 0.0119, p = 0.134), while the high-capacity group analysis failed to produce standard errors. This failure likely reflects the similar timing of the treatment among high-capacity provinces which violates the assumptions required by the stacked DiD estimator. Accordingly, a formal statistical comparison between the capacity groups is not possible.
+The possible variance of effect across baseline childcare capacity in 2019 was also studied using the Childcare Resource and Research Unit's data. In doing so, this study categorized the provinces as having "low capacity" or "high capacity" based on the median number of childcare spaces for children aged zero to five. The analysis found an estimated effect of 0.0178 percentage points for provinces with low baseline capacity (SE = 0.0120, p = 0.139), while the high-capacity group analysis failed to produce standard errors. This failure likely reflects the similar timing of the treatment among high-capacity provinces which violates the assumptions required by the stacked DiD estimator. Accordingly, a formal statistical comparison between the capacity groups is not possible.
 
-Collectively, the results suggest that the $10-per-day childcare agreements have had highly limited and possibly non-existent effect in increasing maternal labour force participation in the observation period (2019-2025). Robustness checks affirm the identification strategy, as parallel pre-trends hold (ATT ≈ 0 in restricted 2019-2021 model, p > 0.05), and placebo tests for hypothetical 2018 treatment yield ATT ≈ 0 (p > 0.05), ruling out confounding time trends. The null findings are consistent across three demographic subgroups and capacity contexts indicate that this null finding is a robust pattern rather than a limitation of the analytical approach.
+Collectively, the results suggest that the $10-per-day childcare agreements have had highly limited and possibly non-existent effect in increasing maternal labour force participation in the observation period (2019-2025). Robustness checks affirm the identification strategy, as parallel pre-trends hold (ATT ≈ 0 in restricted 2019-2021 model, p > 0.05), and placebo tests for hypothetical 2018 treatment yield ATT ≈ 0 (p > 0.05), ruling out confounding time trends. The null findings are consistent across three demographic subgroups, and capacity contexts indicate that this null finding is a robust pattern rather than a limitation of the analytical approach.
 
 This null finding points to implementation challenges that may have limited the policy's effectiveness to increase maternal labour force participation. Persistent capacity constraints, which reduce access to childcare to begin with, may have limited parents' abilities to access childcare regardless of the affordability or lack of affordability of the childcare services. 
 
 # Discussion {#sec-discussion}
 
-The findings from this analysis indicate that Canada’s federal-provincial $10-per-day childcare agreements, implemented between 2021 and 2023, have not produced a statistically significant increase in maternal labour force participation among women aged 25-44 with a youngest child under six, at least through mid-2025. The estimated average treatment effect of 0.0125 (SE = 0.0131, p = 0.357) suggests a modest potential increase of 1.2 percentage points if the point estimate were statistically significant. However, due to the lack of statistical significance and the confidence interval encompassing the number zero, the absence of a detectable policy impact during the study period may not be rejected. This null result holds across dynamic event-study specifications, which show no pre-trends or evolving effects over time. Further, the result persists in heterogeneous analyses by family structure, education level, and maternal age. Even exploratory examinations by baseline childcare capacity, though limited by estimation challenges in high-capacity provinces, do not reveal meaningful differentials.
+The findings from this analysis indicate that Canada’s federal-provincial $10-per-day childcare agreements, implemented between 2021 and 2023, have not produced a statistically significant increase in maternal labour force participation among women aged 25-44 with a youngest child under six, at least through mid-2025. The estimated average treatment effect of 0.0120 (SE = 0.0135, p = 0.373) suggests a modest potential increase of 1.2 percentage points if the point estimate were statistically significant. However, due to the lack of statistical significance and the confidence interval encompassing the number zero, the absence of a detectable policy impact during the study period may not be rejected. This null result holds across dynamic event-study specifications, which show no pre-trends or evolving effects over time. Further, the result persists in heterogeneous analyses by family structure, education level, and maternal age. Even exploratory examinations by baseline childcare capacity, though limited by estimation challenges in high-capacity provinces, do not reveal meaningful differentials.
 
 These results stand in contrast to the policy's explicit framing as a tool to enhance maternal employment and economic productivity [@departmentoffinance2021budget]. They also diverge from the seminal evidence on Quebec's 1997 childcare reform, where @baker2008universal documented a 7.7 percentage point rise in employment among mothers in two-parent families. Several factors may explain this discrepancy. First, Quebec's program not only reduced fees but also rapidly expanded childcare spaces, creating a supply-side boost that facilitated greater access [@baker2008universal, 717]. In the national rollout examined here, fee reductions were prioritized, but capacity expansion has lagged due to workforce shortages, regulatory hurdles, and infrastructure constraints [@friendly2025interim, 8]. As the abstract notes, persistent capacity limitations likely muted the policy's effects, as affordable fees alone cannot induce labour supply changes if spots remain unavailable. This aligns with international evidence, such as @havnes2011money's study of Norway's universal subsidies, which found no causal impact on maternal employment due to crowding out of informal care arrangements without net gains in overall access. Similarly, in contexts with high baseline maternal participation or alternative care options, such as Canada's relatively generous parental leave policies and cultural norms around part-time work, the demand response to subsidies may be attenuated [@lovasz2018childcare; @akgunduz2017child].
 
@@ -271,7 +206,7 @@ To incorporate the findings of this paper and address the existing gaps in the c
 - Conducting ongoing evaluations with longer horizons and administrative data to monitor evolving impacts on intensive margins and equity [@dhuey2019impact].
 - Exploring targeted subsidies for high-need subgroups, avoiding universal means-testing that may discourage participation [@vatto2024means].
 
-## Limitations (separate contributions and put somewhere else)
+## Limitations and Contributions
 
 This study contributes to the evolving literature on childcare subsidies by providing the first nationwide, causal evaluation of Canada's program using the state-of-the-art stacked difference-in-differences methods, which mitigate biases in staggered adoption settings [@wing2024stacked; @chaisemartin2022twoway]. It builds on prior work by incorporating monthly microdata for precise timing and robustness checks, including placebo tests and pre-trend validations, that affirm the identification strategy. However, limitations warrant caution. The absence of a never-treated control group is addressed through the stacked approach but assumes no spillovers across provinces (e.g., migration). The focus on the extensive margin of labour force participation may overlook intensive-margin shifts, such as increased hours worked or transitions to full-time employment, as seen in related Canadian policies [@dhuey2019impact]. Future research could extend this by examining hours, wages, or child development outcomes using administrative data or longer panels. Additionally, incorporating reliable income measures or qualitative insights into access barriers would enrich subgroup analyses.
 
@@ -284,32 +219,7 @@ This study contributes to the evolving literature on childcare subsidies by prov
 
 # Additional data details
 
-@tbl-provincial-treatment provides the treatment timing for each province based on the signing of bilateral childcare agreements.
-
-```{r}
-#| echo: false
-#| label: tbl-provincial-treatment
-#| tbl-cap: "Provincial Treatment Timing: Bilateral Agreement Signing Dates"
-
-treatment_timing <- tibble(
-  Province = c("British Columbia", "Nova Scotia", "Prince Edward Island",
-               "Newfoundland and Labrador", "Yukon", "Manitoba",
-               "Saskatchewan", "Quebec", "New Brunswick", "Northwest Territories",
-               "Nunavut", "Alberta", "Ontario"),
-  `Agreement Date` = c("November 2021", "November 2021", "November 2021",
-                       "December 2021", "December 2021", "December 2021",
-                       "January 2022", "February 2022", "March 2022", "March 2022",
-                       "March 2022", "November 2022", "March 2023"),
-  `Treatment Start` = c("2021-11", "2021-11", "2021-11",
-                        "2021-12", "2021-12", "2021-12",
-                        "2022-01", "2022-02", "2022-03", "2022-03",
-                        "2022-03", "2022-11", "2023-03")
-)
-
-kable(treatment_timing,
-      align = "lcc") |>
-  kable_styling(latex_options = c("hold_position"))
-```
+The treatment timing for each province is based on the signing of bilateral childcare agreements. British Columbia, Nova Scotia, and Prince Edward Island signed agreements in November 2021. Newfoundland and Labrador, Yukon, and Manitoba signed in December 2021. Saskatchewan signed in January 2022, Quebec in February 2022, and New Brunswick, Northwest Territories, and Nunavut in March 2022. Alberta signed in November 2022, and Ontario was the last province to sign in March 2023.
 
 \newpage
 
