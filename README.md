@@ -15,12 +15,3 @@ The repo is structured as:
 -   `output` contains the figures used in the paper and the csv files that have created the figures 
 -   `my scripts` contains the R scripts used to simulate, download and clean data.
 
-
-## Some checks
-
-- [ ] Change the rproj file name so that it's not starter_folder.Rproj
-- [ ] Change the README title so that it's not Starter folder
-- [ ] Remove files that you're not using
-- [ ] Update comments in R scripts
-
-- [ ] Remove this checklist
