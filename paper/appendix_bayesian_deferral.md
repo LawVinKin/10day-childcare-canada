@@ -1,3 +1,37 @@
+```markdown
+Planned Bayesian Hierarchical Analysis — Permanent archival note
+
+The project considered cohort-level Bayesian hierarchical models (varying
+slopes by treatment cohort) during early stages of analysis. After exploration
+and pilot attempts, the team has decided not to run cohort-level Bayesian
+models as part of this project or its submission package. This decision is
+final for this repository: the archived model code is retained for
+transparency only and will not be executed by the project team.
+
+Why archived and not run
+
+- The archived code documents explicit model specifications and priors, but
+  re-running the full hierarchical MCMC requires substantial compute and a
+  separate implementation/maintenance burden that the project will not
+  undertake.
+- The project pivoted to a set of frequentist robustness checks (mixed
+  models, cluster bootstrap, subgroup MDEs) that provide clear and
+  reproducible robustness evidence for the submitted manuscript.
+
+Where the code is
+
+- The archived script is located at `my scripts/08-bayesian_models.R.disabled`.
+  It is preserved only for documentation and reproducibility for external
+  researchers; DO NOT re-enable this script in the active project workflow.
+
+Contact and reproducibility
+
+If an external researcher wishes to reproduce or extend the Bayesian
+specification, they may inspect the archived script and run it independently
+on suitable hardware. The project team will not run these models or provide
+Bayesian outputs for the submission.
+
+``` 
 Planned Bayesian Hierarchical Analysis — Note
 
 Planned Bayesian hierarchical models (cohort-level varying slopes and pooled hierarchical models) were part of the pre-registered analysis plan for this paper. These models were intended to borrow strength across provinces and stabilize month-by-month posterior estimates.

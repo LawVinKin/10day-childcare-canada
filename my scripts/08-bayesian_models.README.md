@@ -1,22 +1,26 @@
-This script has been archived and disabled.
+This archived script is being retained for reproducibility only and is
+permanently disabled for this project.
 
-- Original: `my scripts/08-bayesian_models.R`
-- Archived copy: `my scripts/08-bayesian_models.R.disabled`
+Original: `my scripts/08-bayesian_models.R`
+Archived copy: `my scripts/08-bayesian_models.R.disabled`
 
-Reason: Cohort-level Bayesian hierarchical models require substantial CPU/RAM
-and a working Stan toolchain. To prevent accidental long-running jobs on the
-developer laptop, the active script was disabled and an archived copy was
-preserved.
+Policy decision: the project will not run cohort-level Bayesian models. The
+archived script is preserved so other researchers can reproduce the original
+specification if desired, but DO NOT re-enable or execute it as part of this
+analysis or the submission package.
 
-How to re-enable:
-1. Review the archived file `my scripts/08-bayesian_models.R.disabled`.
-2. Move it back to `my scripts/08-bayesian_models.R`:
+If you are an external user who wishes to re-run these models independently,
+follow these general steps at your own risk and on appropriate hardware:
+
+1. Review `my scripts/08-bayesian_models.R.disabled` to inspect the model
+   specification and priors.
+2. Move the file back and re-enable only in a separate fork/clone:
    ```bash
    mv "my scripts/08-bayesian_models.R.disabled" "my scripts/08-bayesian_models.R"
    ```
-3. Inside the script set `run_bayesian <- TRUE` and adjust `brms_options` to
-   desired `chains`, `iter`, and `cores`.
+3. Use `cmdstanr` with CmdStan installed on a machine with sufficient
+   resources (recommended: >=8 CPU cores and >=32 GB RAM). This project will
+   not provide support for running those jobs.
 
-Notes:
-- Consider running large Bayesian jobs on a remote server or HPC with >8 cores
-  and >=32GB RAM.
+This README documents the permanent archival decision and the location of the
+archived copy for transparency and reproducibility.
