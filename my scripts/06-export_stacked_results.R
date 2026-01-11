@@ -1,6 +1,8 @@
+# This script generates event study and heterogeneity plots from stacked DiD results
+
 library(tidyverse)
 library(ggplot2)
-library(showtext)
+library(showtext) # this is for custom fonts; not needed if using default fonts
 
 showtext_auto()
 font_add("Times New Roman", regular = "/System/Library/Fonts/Supplemental/Times New Roman.ttf")
@@ -8,10 +10,11 @@ font_add("Times New Roman", regular = "/System/Library/Fonts/Supplemental/Times 
 dir.create("output/figures", showWarnings = FALSE, recursive = TRUE)
 
 all_stacked_results_summary <- read_csv("output/results/stacked_did_results_summary.csv")
-dynamic_effects_data <- read_csv("output/results/stacked_did_dynamic_effects.csv") |>
-  filter(rel_time_num >= -11 & rel_time_num <= 11) |>
+dynamic_effects_data <- read_csv("output/results/stacked_did_dynamic_effects.csv") %>%
+  filter(rel_time_num >= -11 & rel_time_num <= 11) %>%
   filter(!is.na(se))
 
+# this creates the event study plot, with confidence intervals and vertical lines at treatment time
 fig1 <- ggplot(dynamic_effects_data, aes(x = rel_time_num, y = estimate)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
   geom_vline(xintercept = -0.5, linetype = "dashed", color = "red", alpha = 0.5) +
@@ -30,12 +33,14 @@ fig1 <- ggplot(dynamic_effects_data, aes(x = rel_time_num, y = estimate)) +
         plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
         plot.subtitle = element_text(hjust = 0, size = 8, face = "italic"))
 
+# saving it both as pdf and png for flexibility; no need if only one is your desired format
 ggsave("output/figures/figure1_event_study_plot.png", fig1, width = 8, height = 6, dpi = 300)
 ggsave("output/figures/figure1_event_study_plot.pdf", fig1, width = 8, height = 6)
 
 plot_data_subgroups <- all_stacked_results_summary %>%
-  filter(subgroup != "Full Sample")
+  filter(subgroup != "Full Sample") # this excludes the overall estimate from the heterogeneity plot
 
+# this generates the heterogeneity plot with confidence intervals for each subgroup
 fig2 <- ggplot(plot_data_subgroups, aes(x = estimate, y = reorder(subgroup, estimate))) +
   geom_vline(xintercept = 0, linetype = "dashed", color = "gray50") +
   geom_errorbarh(aes(xmin = ci_lower, xmax = ci_upper), height = 0.2) +

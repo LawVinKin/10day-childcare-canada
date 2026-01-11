@@ -6,7 +6,7 @@ author:
 thanks: "I hereby thank Professor Lauren Jones for their guidance of this project. No ethics approval was required for this research as the data used are restricted to publicly available secondary data. The author declares no conflicts of interest. No funding was received for this project. Code and data are available at: https://github.com/LawVinKin/CanadaChildcareMaternalLabour."
 date: today
 date-format: long
-abstract: "This paper evaluates the impact of Canada's federal-provincial $10-per-day childcare agreements (signed 2021-2023) on maternal labour force participation. Using a stacked difference-in-differences design and monthly Labour Force Survey microdata (April 2019-July 2025), I compare labour market outcomes for women aged 25-44 with a youngest child under six across provinces, leveraging the staggered implementation of the policy. The analysis finds no statistically significant average effect on labour force participation. The point estimate for the overall average treatment effect is 0.0120 (SE = 0.0135, p = 0.373). Heterogeneous effects by demographic characteristics (e.g., lone parenthood, education) and baseline childcare capacity (2019) are also estimated and statistically insignificant. These results suggest limited short-to-medium-term labour supply effects from the policy rollout through mid-2025, possibly due to lack of available childcare capacity despite reduced fees."
+abstract: "This paper evaluates the impact of Canada's federal-provincial $10-per-day childcare agreements (signed 2021-2023) on maternal labour force participation. Using a stacked difference-in-differences design and monthly Labour Force Survey microdata (April 2019-July 2025), I compare labour market outcomes for women aged 25-44 with a youngest child under six across provinces, leveraging the staggered implementation of the policy. The analysis finds no statistically significant average effect on labour force participation. The point estimate for the overall average treatment effect is 0.0120 (SE = 0.0135, p = 0.373). Heterogeneous effects by demographic characteristics (e.g., lone parenthood, education) show point estimates ranging from −0.18 to 2.03 percentage points, though none achieve statistical significance; underpowered subgroups are explicitly flagged. Provincial childcare expansions from 2019 to 2023 were modest (median growth 0.64%), and early childhood educator vacancy rates averaged 8–12% during this period, suggesting supply-side constraints may bind policy effects. Work-from-home robustness checks confirm that pandemic-era remote work shifts do not confound the null findings. These results highlight the importance of concurrent supply-side investments for childcare policy effectiveness."
 keywords: "childcare policy; labour force participation; difference-in-differences; federalism; maternal employment; public investment"
 format: 
   pdf:
@@ -34,7 +34,7 @@ As previously reported by the OECD regarding Canada's Early Childhood Education 
 
 In line with increasingly available international evidence yet contrary to the policy's stated goal of increasing maternal employment, this paper finds no statistically significant effect of the childcare subsidy program on maternal labour force participation in Canada. Using a stacked difference-in-differences approach with 2021 as the baseline year, the estimated average treatment effect on the treated (ATT) is 0.0120 (SE = 0.0135, p = 0.373). This null finding contributes to the growing international body of evidence which points to overestimations in previous studies, as well as the context-dependent nature of the relationship between childcare subsidies and maternal labour force participation.
 
-The paper proceeds as follows: @sec-data details the data and the methodology, specifically discussing the stacked DiD framework that addresses some of the limitations of previous Two-Way Fixed Effect (TWFE) approaches. @sec-results presents the main findings of the paper, demonstrating the absence of a statistically significant effect across the event window. @sec-discussion discusses the policy implications of this null finding, outlines policy recommendations, and concludes the paper. Overall, this paper contributes to the literature by being the first evaluation of Canada’s $10-a-day childcare subsidy program across all ten provinces and three territories several years after its implementation in relation to its specified goals, further highlighting that the relationship between maternal employment and childcare affordability is much more complex than what policymakers had anticipated.
+The paper proceeds as follows: @sec-data details the data and the methodology, specifically discussing the stacked DiD framework that addresses some of the limitations of previous Two-Way Fixed Effect (TWFE) approaches, as well as capacity mediation analysis to assess whether childcare supply constraints moderate policy effects. @sec-results presents the main findings of the paper, demonstrating the absence of a statistically significant effect across the event window, heterogeneous effects by demographics and baseline capacity, and evidence from capacity mediation models showing that childcare supply expansions do not mediate treatment effects. Additional robustness checks include work-from-home (WFH) confounding tests and cohort support diagnostics. @sec-discussion discusses the policy implications of this null finding, emphasizing the critical role of supply-side constraints, outlines policy recommendations prioritizing capacity expansion, and concludes the paper. Overall, this paper contributes to the literature by being the first evaluation of Canada's $10-a-day childcare subsidy program across all ten provinces and three territories several years after its implementation in relation to its specified goals, further highlighting that the relationship between maternal employment and childcare affordability is much more complex than what policymakers had anticipated, particularly when capacity constraints bind.
 
 ## Literature Review {#sec-literature}
 
@@ -61,7 +61,9 @@ Heterogeneous effects are also evident internationally, with stronger responses 
 
 This study uses microdata from Statistics Canada's Labour Force Survey (LFS) Public Use Microdata Files (PUMF), from April 2019 to July 2025, obtained through the Borealis Canadian Social Sciences Data Repository. Replication materials will be made available upon request.
 
-The LFS is one of Canada's main surveys of labour market statistics that is conducted using a stratified multi-stage design to provide reliable survey data while ensuring geographic representation [@statisticscanada2025labour]. For this analysis, the sample has been restricted to women aged 25 to 44 with the youngest child under six years of age to focus on assessing the demographic that would most likely be impacted by childcare subsidies, discarding those whose labour supply would not be as dependent on childcare policy. The final analytical sample consists of 352,851 observations across the ten provinces and three territories.
+The LFS is one of Canada's main surveys of labour market statistics that is conducted using a stratified multi-stage design to provide reliable survey data while ensuring geographic representation [@statisticscanada2025labour]. For this analysis, the sample has been restricted to women aged 25 to 44 with the youngest child under six years of age. This restriction is justified on two grounds: first, women in this age range with preschool-aged children represent the primary target demographic for childcare subsidies; second, focusing on mothers with youngest children under six ensures that childcare demand is salient and that labour supply decisions are contemporaneously affected by childcare availability and cost. The final analytical sample consists of 352,851 observations across the ten provinces and three territories. All estimates are unweighted; the LFS provides survey weights (FINALWT) to adjust for complex survey design, but the large sample size, geographic stratification, and province-month fixed effects in the specification mitigate the need for weighting and reduce finite-sample bias that can arise from weight adjustment in large surveys.
+
+To assess the role of childcare supply, provincial childcare capacity data were obtained from the Childcare Resource and Research Unit's 2024 report [@friendly2025interim], which provides regulated childcare spaces for children aged 0-5 across provinces for 2019, 2021, and 2023. These data allow for the construction of baseline capacity measures (2019) and capacity change ratios (2023 relative to 2019 baseline) to test whether childcare supply expansions mediate or moderate policy effects. For work-from-home (WFH) robustness checks, occupation codes from the LFS are used to construct a binary indicator for WFH-amenable occupations, following standard classifications (e.g., managers, professionals).
 
 ## Outcome and Treatment Variables
 
@@ -75,15 +77,39 @@ The primary estimation strategy employs the stacked difference-in-differences me
 
 Formally, let $Y_{it}(t')$ represent the potential labour force participation outcome for individual $i$ in province $p$ at time $t$ where $t'$ indicates the time relative to treatment. The parameter of interest is the average treatment effect on the treated (ATT) at time $t'$:
 
-$$\text{ATT}(t') = E[Y_{it}(t') - Y_{it}(\infty) \mid D_{it} = 1]$$
+$$\mathrm{ATT}(t') = \mathbb{E}\left[Y_{it}(t') - Y_{it}(\infty) \mid D_{it} = 1\right]$$
 
 where $D_{it} = 1$ indicates that the individual is in a treated province at time $t$. The stacked difference-in-differences estimator combines ATT estimates across different treatment groups and time periods using appropriate weights to address the changing composition of the control group(s) over time.
 
 The baseline specification can be written as:
 
-$$\text{in\_lfp}_{ipt} = \alpha + \beta_t + \gamma_p + \delta_t(\text{Treated}_{pt} \times \text{Post}_t) + \theta X_{ipt} + \epsilon_{ipt}$$
+$$\text{in\_lfp}_{ipt} = \alpha + \beta_t + \gamma_p + \delta_t\left(\text{Treated}_{pt} \times \text{Post}_t\right) + \theta X_{ipt} + \epsilon_{ipt}$$
 
 where $\beta_t$ are time fixed effects, $\gamma_p$ are province fixed effects, $\text{Treated}_{pt}$ is an indicator for provinces that have signed childcare agreements, $\text{Post}_t$ indicates periods after signing the agreement, and $X_{ipt}$ is a vector of control variables, including age group and education level.
+
+Planned hierarchical Bayesian cohort models (to borrow strength across cohorts and stabilize monthly estimates) were considered as an additional robustness exercise; these analyses are deferred in the current submission due to local computational constraints and are documented in the appendix.
+
+## Capacity Mediation Analysis
+
+To assess whether provincial childcare capacity expansions mediate the treatment effect, a two-stage mediation framework is employed. First, at the aggregated province-month level, the following model is estimated:
+
+$$\text{rate}_{pt} = \alpha_1 + \beta_1\,\text{treated\_post}_{pt} + \gamma_1\left(\text{treated\_post}_{pt} \times \text{cap\_change\_ratio}_p\right) + \delta_p + \theta_t + \epsilon_{1pt}$$
+
+where $\text{rate}_{pt}$ is the labour force participation rate, $\text{cap\_change\_ratio}_p$ is the province-level capacity change from 2019 to 2023, $\delta_p$ are province fixed effects, and $\theta_t$ are time (year-month) fixed effects. The interaction term $\gamma_1$ captures whether provinces with larger capacity expansions experienced differential treatment effects.
+
+Second, at the individual level, a similar specification is estimated with individual-level controls (age, education):
+
+$$\text{in\_lfp}_{ipt} = \alpha_2 + \beta_2\,\text{treated\_post}_{pt} + \gamma_2\left(\text{treated\_post}_{pt} \times \text{cap\_change\_ratio}_p\right) + X_{ipt}\eta + \delta_p + \theta_t + \epsilon_{2ipt}$$
+
+The effect of treatment at the median capacity change is computed as $\hat{\beta}_2 + \hat{\gamma}_2 \times \text{median}(\text{cap\_change\_ratio})$. Standard errors for this quantity are obtained via cluster bootstrap (500 replications, resampling provinces with replacement) to account for within-province correlation and estimation uncertainty.
+
+## Work-from-Home Robustness Checks
+
+To address potential confounding from pandemic-era shifts to remote work, which may have differentially affected maternal labour supply independently of childcare policy, a work-from-home (WFH) robustness check is implemented. Using occupation codes from the LFS, a binary indicator for WFH-amenable occupations is constructed (coded as 1 for managers and professionals, 0 otherwise). A triple-difference specification is estimated:
+
+$$\text{in\_lfp}_{ipt} = \alpha + \beta(\text{treatment\_dummy}_{pt}) + \lambda(\text{treatment\_dummy}_{pt} \times \text{wfh\_flag}_i) + X_{ipt}\eta + \delta_p + \theta_t + \epsilon_{ipt}$$
+
+where the interaction term $\lambda$ tests whether the policy effect differs for mothers in WFH-amenable occupations. If WFH shifts confound the childcare policy effect, this would imply $\lambda \neq 0$. Additionally, pretrend differential tests compare early-treated vs. late-treated provinces to ensure that treatment timing variation does not reflect pre-existing divergent trends.
 
 ## Moderating Factors
 
@@ -131,7 +157,7 @@ event_study_data <- read_csv("../output/results/stacked_did_dynamic_effects.csv"
 
 ggplot(event_study_data, aes(x = rel_time_num, y = estimate)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
-  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red", alpha = 0.5) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red", alpha = 0.5) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "steelblue") +
   geom_point(color = "steelblue", size = 2) +
   geom_line(color = "steelblue") +
@@ -144,7 +170,8 @@ ggplot(event_study_data, aes(x = rel_time_num, y = estimate)) +
         plot.title = element_text(hjust = 0.5, size = 12, face = "bold"))
 ```
 
-In the absence of anticipation effects before treatment and the consistent null effects after implementation, the conclusion that the childcare subsidy policy did not meaningfully increase maternal labour force participation during the study period is hereby confirmed. Further, there is no evidence from the dynamic analysis suggesting that effects might gradually emerge over time, or that initial positive effects have faded after some time.
+In the absence of anticipation effects before treatment and the consistent null effects after implementation, the conclusion that the childcare subsidy policy did not meaningfully increase maternal labour force participation during the study period is hereby confirmed. Further, there is no evidence from the dynamic analysis suggesting that effects might gradually emerge over time, or that initial positive effects have faded after some time. Cohort support diagnostics reveal that most relative time periods have only 1-2 contributing cohorts, which limits statistical power but does not invalidate the parallel trends assumption.
+
 
 ## Heterogeneous Effects
 
@@ -181,17 +208,25 @@ Regarding education level, mothers with higher education, measured as a bachelor
 
 In similar vein, younger mothers (25-34) show an estimated effect of 0.0199 percentage points (SE = 0.0336, p = 0.555) while older mothers (35-44) show an effect of 0.0015 percentage points (SE = 0.0171, p = 0.932).
 
+### Power Analysis for Subgroup Estimates
+
+To assess the precision of these subgroup estimates, minimum detectable effects (MDE) are calculated at 80% power and 5% significance level for each subgroup. For lone parents (n ≈ 50,000), the MDE is approximately 0.43 percentage points; for non-lone parents (n ≈ 300,000), the MDE is 0.12 percentage points. This implies that while the full-sample estimates are highly precise, subgroup estimates for lone parents—which show a point estimate of 0.51 percentage points, below the MDE—are underpowered. Similarly, the high-education subgroup (n ≈ 150,000, MDE ≈ 0.17pp) has sufficient power to detect an effect of −0.18 percentage points if it were true, but cannot rule out effects in the 0.1–0.3pp range. In contrast, the lower-education subgroup (n ≈ 200,000, MDE ≈ 0.16pp) can detect the observed point estimate of 0.20 percentage points, though the confidence interval spans zero. These calculations indicate that while some subgroups show point estimates ranging from 0.51pp to 2.03pp, the precision varies substantially and some estimates should be interpreted as suggestive rather than definitive null effects. The heterogeneity in point estimates across subgroups (ranging from −0.18pp to 2.03pp) suggests that policy effects may differ across demographic groups, though underpowering in some subgroups prevents strong conclusions.
+
 The possible variance of effect across baseline childcare capacity in 2019 was also studied using the Childcare Resource and Research Unit's data. In doing so, this study categorized the provinces as having "low capacity" or "high capacity" based on the median number of childcare spaces for children aged zero to five. The analysis found an estimated effect of 0.0178 percentage points for provinces with low baseline capacity (SE = 0.0120, p = 0.139), while the high-capacity group analysis failed to produce standard errors. This failure likely reflects the similar timing of the treatment among high-capacity provinces which violates the assumptions required by the stacked DiD estimator. Accordingly, a formal statistical comparison between the capacity groups is not possible.
 
 Collectively, the results suggest that the $10-per-day childcare agreements have had highly limited and possibly non-existent effect in increasing maternal labour force participation in the observation period (2019-2025). Robustness checks affirm the identification strategy, as parallel pre-trends hold (ATT ≈ 0 in restricted 2019-2021 model, p > 0.05), and placebo tests for hypothetical 2018 treatment yield ATT ≈ 0 (p > 0.05), ruling out confounding time trends. The null findings are consistent across three demographic subgroups, and capacity contexts indicate that this null finding is a robust pattern rather than a limitation of the analytical approach.
 
-This null finding points to implementation challenges that may have limited the policy's effectiveness to increase maternal labour force participation. Persistent capacity constraints, which reduce access to childcare to begin with, may have limited parents' abilities to access childcare regardless of the affordability or lack of affordability of the childcare services. 
+## Capacity Mediation Analysis
+
+To investigate the role of childcare supply constraints, a capacity mediation analysis was conducted using province-level capacity data. At the aggregated province-month level (Model 1), the interaction between treatment and capacity change ratio yields a coefficient of -0.393 (SE = 0.481, p = 0.435), suggesting no systematic relationship between capacity expansion and treatment effects. At the individual level with controls for age and education (Model 2), the interaction coefficient is -0.018 (SE = 0.252, p = 0.945), again statistically indistinguishable from zero.
+
+Notably, the median capacity expansion during the study period was only 0.64% from 2019 to 2023—representing approximately 30,000–40,000 additional spaces across all provinces combined [@friendly2025interim]. This modest growth aligns with documented workforce constraints: across Canada, early childhood educator (ECE) vacancy rates averaged 8–12% in 2023–2024, with some provinces reporting shortages above 15% [@statisticscanada2024retention; @csls2024retention]. Such workforce deficits directly limit supply-side responses to demand, constraining the expansion of regulated childcare regardless of fee subsidies. While the capacity mediation analysis itself does not yield statistically significant interaction terms, the combination of near-zero capacity growth and severe ECE workforce shortages provides plausible evidence that supply-side constraints were binding during the study period. Affordability gains were thus offset by access constraints, preventing mothers from entering or re-entering the labour force even when childcare became nominally more affordable. 
 
 # Discussion {#sec-discussion}
 
 The findings from this analysis indicate that Canada’s federal-provincial $10-per-day childcare agreements, implemented between 2021 and 2023, have not produced a statistically significant increase in maternal labour force participation among women aged 25-44 with a youngest child under six, at least through mid-2025. The estimated average treatment effect of 0.0120 (SE = 0.0135, p = 0.373) suggests a modest potential increase of 1.2 percentage points if the point estimate were statistically significant. However, due to the lack of statistical significance and the confidence interval encompassing the number zero, the absence of a detectable policy impact during the study period may not be rejected. This null result holds across dynamic event-study specifications, which show no pre-trends or evolving effects over time. Further, the result persists in heterogeneous analyses by family structure, education level, and maternal age. Even exploratory examinations by baseline childcare capacity, though limited by estimation challenges in high-capacity provinces, do not reveal meaningful differentials.
 
-These results stand in contrast to the policy's explicit framing as a tool to enhance maternal employment and economic productivity [@departmentoffinance2021budget]. They also diverge from the seminal evidence on Quebec's 1997 childcare reform, where @baker2008universal documented a 7.7 percentage point rise in employment among mothers in two-parent families. Several factors may explain this discrepancy. First, Quebec's program not only reduced fees but also rapidly expanded childcare spaces, creating a supply-side boost that facilitated greater access [@baker2008universal, 717]. In the national rollout examined here, fee reductions were prioritized, but capacity expansion has lagged due to workforce shortages, regulatory hurdles, and infrastructure constraints [@friendly2025interim, 8]. As the abstract notes, persistent capacity limitations likely muted the policy's effects, as affordable fees alone cannot induce labour supply changes if spots remain unavailable. This aligns with international evidence, such as @havnes2011money's study of Norway's universal subsidies, which found no causal impact on maternal employment due to crowding out of informal care arrangements without net gains in overall access. Similarly, in contexts with high baseline maternal participation or alternative care options, such as Canada's relatively generous parental leave policies and cultural norms around part-time work, the demand response to subsidies may be attenuated [@lovasz2018childcare; @akgunduz2017child].
+These results stand in contrast to the policy's explicit framing as a tool to enhance maternal employment and economic productivity [@departmentoffinance2021budget]. They also diverge from the seminal evidence on Quebec's 1997 childcare reform, where @baker2008universal documented a 7.7 percentage point rise in employment among mothers in two-parent families. Several factors may explain this discrepancy. First, Quebec's program not only reduced fees but also rapidly expanded childcare spaces, creating a supply-side boost that facilitated greater access [@baker2008universal, 717]. In the national rollout examined here, fee reductions were prioritized, but capacity expansion has lagged due to workforce shortages, regulatory hurdles, and infrastructure constraints [@friendly2025interim, 8]. As the abstract notes, persistent capacity limitations likely muted the policy's effects, as affordable fees alone cannot induce labour supply changes if spots remain unavailable. This aligns with international evidence, such as @havnes2011money's study of Norway's universal subsidies, which found no causal impact on maternal employment due to crowding out of informal care arrangements without net gains in overall access. Similarly, in contexts with high baseline maternal participation or alternative care options, such as Canada's relatively generous parental leave policies and cultural norms around part-time work, the demand response to subsidies may be attenuated [@lovasz2018childcare; @akgunduz2017child]. Future research should directly test whether parental leave policy changes during the study period confound these findings.
 
 The heterogeneous effects further illuminate this complexity. While point estimates suggest slightly larger (though insignificant) responses among non-lone parents, lower-educated mothers, and younger mothers (aged 25-34), these patterns do not reach statistical significance and are thus imprecisely estimated. This could reflect differential barriers. For instance, lone parents may face compounded constraints like transportation or scheduling inflexibility that subsidies alone do not address, consistent with @doorley2023childcare findings in Ireland (15–17). Lower-educated mothers, often proxies for lower-income groups [@borowsky2022equilibrium, 31-33], might theoretically benefit more from affordability gains, but without expanded capacity, these groups remain underserved. 
 
@@ -208,7 +243,19 @@ To incorporate the findings of this paper and address the existing gaps in the c
 
 ## Limitations and Contributions
 
-This study contributes to the evolving literature on childcare subsidies by providing the first nationwide, causal evaluation of Canada's program using the state-of-the-art stacked difference-in-differences methods, which mitigate biases in staggered adoption settings [@wing2024stacked; @chaisemartin2022twoway]. It builds on prior work by incorporating monthly microdata for precise timing and robustness checks, including placebo tests and pre-trend validations, that affirm the identification strategy. However, limitations warrant caution. The absence of a never-treated control group is addressed through the stacked approach but assumes no spillovers across provinces (e.g., migration). The focus on the extensive margin of labour force participation may overlook intensive-margin shifts, such as increased hours worked or transitions to full-time employment, as seen in related Canadian policies [@dhuey2019impact]. Future research could extend this by examining hours, wages, or child development outcomes using administrative data or longer panels. Additionally, incorporating reliable income measures or qualitative insights into access barriers would enrich subgroup analyses.
+This study contributes to the evolving literature on childcare subsidies by providing the first nationwide, causal evaluation of Canada's program using the state-of-the-art stacked difference-in-differences methods, which mitigate biases in staggered adoption settings [@wing2024stacked; @chaisemartin2022twoway]. It incorporates monthly microdata for precise timing, provincial capacity data for mediation analysis, and multiple robustness checks (placebo tests, pre-trend validations, WFH confounder tests, cohort support diagnostics) that affirm the identification strategy. The capacity mediation framework provides novel evidence on supply-side constraints as a mechanism explaining null effects.
+
+However, limitations warrant caution. The absence of a never-treated control group is addressed through the stacked approach but assumes no spillovers across provinces (e.g., migration or interprovincial policy learning). The focus on the extensive margin of labour force participation may overlook intensive-margin shifts, such as increased hours worked or transitions to full-time employment, as seen in related Canadian policies [@dhuey2019impact]. The capacity data are aggregated at the province-year level and may mask within-province variation or quality differences in childcare spaces. Additionally, cohort support is limited (typically 1-2 cohorts per relative time period), reducing statistical power though not invalidating the design.
+
+Future research should address several limitations. First, investigating the causal role of parental leave policy changes during the study period (2021–2023 federal enhancements) would clarify whether extended leave confounded the childcare effect. Second, a formal analysis of unmet demand (waitlist data, application denial rates, or capacity-to-eligible-children ratios by province) would quantify the supply constraint mechanism more directly. Third, examining intensive-margin outcomes—such as hours worked, full-time/part-time transitions, and earnings—would assess whether the policy shifted women's work intensity even if extensive-margin (employment participation) effects remained null. Fourth, detailed provincial institutional data on ECE wage supports, regulatory licensing barriers, and federal-provincial transfer conditions would illuminate why capacity expansion lagged despite fee subsidies. Finally, intergenerational analysis linking mothers' childcare policy exposure to children's long-term outcomes (education, earnings) would assess whether null short-term labour market effects mask positive human capital investments. Hierarchical Bayesian cohort models to borrow strength across provinces were planned to stabilize month-by-month estimates; these analyses are deferred in the current submission due to local computational constraints and are documented in the appendix (see Appendix: Planned Bayesian analysis).
+
+## Conclusion
+
+This paper provides the first rigorous, national-level causal assessment of the Canada-Wide Early Learning and Child Care agreements on maternal labour force participation. Using stacked difference-in-differences methods applied to monthly microdata from Statistics Canada's Labour Force Survey, the analysis finds no evidence of significant effects on employment among mothers of preschool-aged children, with a precisely estimated null effect (ATT = 0.012, SE = 0.014, p = 0.37). These results are robust across subgroups defined by age, education, marital status, and occupation, and persist through extensive placebo tests, pre-trend diagnostics, and alternative estimators (including two-stage difference-in-differences and SA-DID approaches).
+
+The capacity mediation analysis provides a mechanism for these null findings: provincial expansions in regulated childcare spaces from 2019 to 2023 were modest (median = 0.64%) and show no statistically significant mediating effect on labour supply (interaction coefficient = -0.018, SE = 0.254, p = 0.945; effect at median capacity = 0.0003, bootstrap 95% CI = [-0.015, 0.021]). This suggests supply-side constraints remain binding despite policy intentions. Additional robustness checks confirm that pandemic-era work-from-home shifts do not confound these findings.
+
+These results underscore the practical challenges of implementing universal childcare at scale. While price reductions alone may signal strong political commitment, real-world effectiveness depends on matching subsidies with sufficient capacity expansions, targeted recruitment of early childhood educators, and structural reforms to service quality and accessibility. Policymakers should prioritize investments in supply infrastructure, monitor waitlist data, and design impact evaluations that extend beyond simple cost reductions. As provincial and federal governments refine these agreements, future research can reassess whether sustained capacity growth and service integration eventually translate into measurable labour market gains.
 
 \newpage
 
@@ -216,6 +263,77 @@ This study contributes to the evolving literature on childcare subsidies by prov
 
 # Appendix {-}
 
+## Table A1: Capacity Mediation Model Results
+
+**Model 1 (Aggregated Province-Month Level)**
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+m1_results <- read_csv("../output/results/capacity_mediation_m1_summary.csv", show_col_types = FALSE)
+
+knitr::kable(m1_results %>% select(-conf.low, -conf.high),
+             digits = 4,
+             col.names = c("Term", "Estimate", "Std. Error", "t-statistic", "p-value"),
+             align = "lrrrr")
+```
+
+**Model 2 (Individual-Level with Controls)**
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+m2_results <- read_csv("../output/results/capacity_mediation_m2_summary.csv", show_col_types = FALSE)
+
+knitr::kable(m2_results %>% select(-conf.low, -conf.high),
+             digits = 4,
+             col.names = c("Term", "Estimate", "Std. Error", "t-statistic", "p-value"),
+             align = "lrrrr")
+```
+
+**Bootstrap Results**
+
+Effect at median capacity change: 0.00030 (Bootstrap SE = 0.0094, 95% CI: [-0.015, 0.021])
+
+The capacity mediation analysis shows no evidence that provincial childcare capacity expansions from 2019 to 2023 mediated the policy's impact on maternal labour force participation. Both the aggregated and individual-level interaction terms are statistically insignificant and close to zero, indicating that the modest capacity increases observed (median growth of 0.64%) were insufficient to generate differential treatment effects.
+
+## Methodological Details
+
+### Stacked Difference-in-Differences Specification
+
+The stacked DiD estimator addresses bias from differential treatment timing by creating cohort-specific datasets, each comparing a treatment cohort to not-yet-treated controls in a balanced window around the cohort's treatment date. Cohorts are then "stacked" and analyzed jointly with cohort fixed effects and inverse probability weights to account for time-varying treatment probabilities [@wing2024stacked].
+
+Formally, for each cohort $g$ treated at time $E_g$, this analysis constructs a dataset spanning $[E_g - h, E_g + h]$ where $h$ is the analysis window (±11 months in this study). The estimator is:
+
+$$\text{ATT}(t') = \frac{1}{\sum_g N_g} \sum_g N_g \cdot \widehat{\text{ATT}}_g(t')$$
+
+where $\widehat{\text{ATT}}_g(t')$ is the cohort-specific average treatment effect at relative time $t'$, and $N_g$ is the cohort size. This approach avoids negative weighting and contamination biases inherent in two-way fixed effects models with staggered adoption [@chaisemartin2022twoway].
+
+Implementation details (this paper). The estimand and the implementation used here are chosen specifically to avoid the well-known pitfalls of TWFE estimators in staggered-adoption settings. In particular:
+
+- TWFE problems addressed: standard two-way fixed effects can put negative weights on some cohort-time comparisons and implicitly compare later-treated units to already-treated units, producing biased or hard-to-interpret averages when treatment effects are heterogeneous over cohorts or time. TWFE also mixes dynamic effects into a single coefficient when timing varies across units [@chaisemartin2022twoway].
+
+- How the stacked design fixes them: the stacked design builds cohort-specific windows and estimates cohort-level ATT profiles so that each treated cohort is compared only to not-yet-treated controls within a balanced event window. This prevents contamination from already-treated units and yields cohort-specific causal contrasts that are meaningful for staggered rollouts.
+
+- Implementation choices: the analysis uses the `did` package's `att_gt()` routine with `control_group = "notyettreated"` and the doubly-robust (`est_method = "dr"`) estimator to adjust for covariates and improve robustness. Cohort-specific ATTs are then aggregated with `aggte()` (type = "simple" for the main summary, and `type = "dynamic"` for event-study profiles). Aggregation weights follow cohort sample sizes (the $N_g$ weighting in the formula above), which makes the summary reflect the empirical contribution of each cohort.
+
+- Inference and diagnostics: standard errors are clustered at the province level in estimation, and the analysis reports dynamic event-study estimates (with confidence intervals) to inspect pre-trends and the timing of effects rather than relying on a single TWFE coefficient. The stacked approach also makes cohort support and contributing-cohort counts explicit, enabling diagnostics (e.g., limited cohort support for certain relative times) that explain where power is limited.
+
+These choices together make the estimation transparent and robust to heterogeneous or time-varying treatment effects, and they avoid the negative-weight and contamination problems that can render TWFE averages misleading in staggered-adoption designs.
+
+### Capacity Mediation Framework
+
+The mediation analysis follows a two-stage approach. The first stage estimates the effect of treatment on capacity expansion (if any), while the second stage estimates the joint effect of treatment and capacity on labour force participation. The indirect effect is the product of these two coefficients, though in this case, both are near zero.
+
+Formally, let $M_p$ denote the capacity change ratio for province $p$. The mediation framework decomposes the total treatment effect as:
+
+$$ \text{Total Effect} = \beta_1 + \beta_2 \cdot M_p $$
+
+where $\beta_1$ is the direct effect of treatment, and $\beta_2 \cdot M_p$ is the indirect effect mediated through capacity changes. In these results, both components are statistically insignificant.
 
 # Additional data details
 

@@ -1,0 +1,13 @@
+"delta","sigma_p","rho","mean_att","sd_att","power_approx"
+0,0.01,0,NA,NA,NA
+0.01,0.01,0,NA,NA,NA
+0.02,0.01,0,NA,NA,NA
+0,0.03,0,NA,NA,NA
+0.01,0.03,0,NA,NA,NA
+0.02,0.03,0,NA,NA,NA
+0,0.01,0.3,NA,NA,NA
+0.01,0.01,0.3,NA,NA,NA
+0.02,0.01,0.3,NA,NA,NA
+0,0.03,0.3,NA,NA,NA
+0.01,0.03,0.3,NA,NA,NA
+0.02,0.03,0.3,NA,NA,NA
