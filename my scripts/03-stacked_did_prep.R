@@ -1,6 +1,8 @@
 library(tidyverse)
 library(haven)
 
+setwd("..")
+
 # We first input data
 analysis_data_stacked <- read_rds("data/02-processed/analysis_dataset.rds")
 capacity_data <- read_csv("data/01-raw_data/raw/provincial_capacity_2019_2021_2023.csv")

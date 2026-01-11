@@ -4,6 +4,8 @@ library(tidyverse)
 library(ggplot2)
 library(showtext) # this is for custom fonts; not needed if using default fonts
 
+setwd("..")
+
 showtext_auto()
 font_add("Times New Roman", regular = "/System/Library/Fonts/Supplemental/Times New Roman.ttf")
 

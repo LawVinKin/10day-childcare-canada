@@ -1,6 +1,8 @@
 library(tidyverse)
 library(haven)
 
+setwd("..")
+
 lfs_files <- list.files("data/01-raw_data/raw", pattern = "^LFS_.*\\.RData$", full.names = TRUE)
 
 get_sex_var_name <- function(table) {

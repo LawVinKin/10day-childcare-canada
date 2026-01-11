@@ -1,6 +1,8 @@
 library(tidyverse)
 library(haven)
 
+setwd("..")
+
 load_data <- function() {
   lfs_data <- read_rds("data/02-processed/lfs_clean.rds")
   treatment_df <- read.csv("data/01-raw_data/raw/treatment_dates.csv")

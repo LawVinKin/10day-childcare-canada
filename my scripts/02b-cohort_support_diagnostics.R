@@ -7,6 +7,8 @@
 library(dplyr)
 library(readr)
 
+setwd("..")
+
 dynamic_path <- "output/results/stacked_did_dynamic_effects.csv"
 out_dir <- "output/results"
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)

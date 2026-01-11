@@ -3,6 +3,8 @@
 library(did)
 library(tidyverse)
 
+setwd("..")
+
 source("my scripts/04-stacked_did_analysis.R")
 
 load_and_prepare_data <- function() {
