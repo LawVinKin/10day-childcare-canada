@@ -69,27 +69,4 @@ if(has_within_variation){
     }
   }
 
-} else {
-  # Fallback: early vs late pretrend comparison
-  prov_treat <- df %>% select(prov, treatment_date) %>% distinct()
-  prov_treat <- prov_treat %>% mutate(treat_date = as.Date(treatment_date))
-  median_date <- median(prov_treat$treat_date, na.rm = TRUE)
-  early_provs <- prov_treat %>% filter(treat_date <= median_date) %>% pull(prov)
-  df <- df %>% mutate(early_group = ifelse(prov %in% early_provs, 1L, 0L))
-
-  if(!"rel_time" %in% names(df)){
-    df <- df %>% mutate(rel_time = as.integer(round(difftime(as.Date(date), as.Date(treatment_date), units = 'weeks')/4.345)))
-  }
-
-  pre <- df %>% filter(rel_time < 0)
-  pre_agg <- pre %>% group_by(prov, rel_time) %>% summarise(rate = mean(in_lfp, na.rm = TRUE), .groups = 'drop')
-  pre_agg <- left_join(pre_agg, prov_treat, by = 'prov') %>% mutate(early = ifelse(prov %in% early_provs, 1L, 0L))
-  m_pre <- tryCatch(feols(rate ~ rel_time * early | prov, data = pre_agg), error = function(e) e)
-  if(inherits(m_pre, 'error')){
-    write_lines(as.character(m_pre), 'output/results/pretrend_early_vs_late_error.txt')
-  } else {
-    saveRDS(m_pre, file = 'output/results/pretrend_early_vs_late.rds')
-    write_csv(broom::tidy(m_pre, conf.int = TRUE), 'output/results/pretrend_early_vs_late_tidy.csv')
-  }
-
 }

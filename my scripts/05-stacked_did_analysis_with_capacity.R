@@ -17,7 +17,7 @@ load_and_prepare_data <- function() {
     )
   analysis_data
 }
-
+# the following function runs stacked DiD for all subgroups including capacity
 run_all_subgroup_analyses <- function(data) {
   bind_rows(
     run_stacked_did(data, "Full Sample"),

@@ -2,10 +2,9 @@
 # mediate the effect of the policy on maternal labor force participation.
 # We estimate point effects and bootstrap for inference.
 
-library(dplyr)
-library(fixest)
-library(broom)
-library(readr)
+library(tidyverse)
+library(fixest) # for econometric modeling with fixed effects and clustered SEs 
+library(broom) # for tidying model outputs 
 
 setwd("..")
 
@@ -17,7 +16,7 @@ cap <- read_csv("data/01-raw_data/raw/provincial_capacity_2019_2021_2023.csv", s
 if('prov_code' %in% names(cap)) cap <- rename(cap, prov = prov_code)
 if('province' %in% names(cap)) cap <- rename(cap, prov = province)
 
-# Prepare capacity data
+# Prepare capacity data, setting 2019 as the baseline
 cap_baseline <- cap %>% filter(year == 2019) %>% select(prov, centre_spaces_0_to_5) %>% rename(cap_2019 = centre_spaces_0_to_5)
 cap_latest <- cap %>% filter(year == 2023) %>% select(prov, centre_spaces_0_to_5) %>% rename(cap_2023 = centre_spaces_0_to_5)
 cap_merge <- left_join(cap_baseline, cap_latest, by = 'prov') %>% mutate(cap_change_ratio = (cap_2023 - cap_2019) / pmax(cap_2019, 1))
@@ -31,18 +30,19 @@ agg <- df_agg %>%
          ym_date = as.Date(paste0(ym, '-01')),
          treated_post = as.integer(!is.na(treatment_date) & ym_date >= treatment_date))
 
-# Merge capacity onto aggregated data
+# Merge capacity onto aggregated data 
 agg2 <- left_join(agg, cap_merge, by = 'prov')
 
-# Model 1: Aggregate level (first-stage like)
+# Model 1: Aggregate level (first-stage analysis): interaction with capacity change 
+# during the analysis period
 m1 <- feols(rate ~ treated_post + treated_post:cap_change_ratio | prov + ym, data = agg2)
 
-# Prepare micro data for Model 2
+# Prepare micro data for Model 2, which is the main analysis at individual level
 micro <- left_join(df_agg, cap_merge, by = 'prov') %>%
   mutate(treatment_date = as.Date(treatment_date), ym = format(as.Date(date), '%Y-%m'),
          ym_date = as.Date(paste0(ym, '-01')), treated_post = as.integer(!is.na(treatment_date) & ym_date >= treatment_date))
 
-# Coerce labelled variables
+# Coerce labelled variables to plain types for fixest
 micro <- micro %>%
   mutate(
     age_12 = suppressWarnings(as.character(haven::as_factor(age_12))),
@@ -50,17 +50,17 @@ micro <- micro %>%
     in_lfp = case_when(is.logical(in_lfp) ~ as.numeric(in_lfp), is.numeric(in_lfp) ~ in_lfp, TRUE ~ suppressWarnings(as.numeric(as.character(in_lfp))))
   )
 
-# Model 2: Micro level with interaction
+# Model 2: Micro level with interaction with capacity
 m2 <- feols(in_lfp ~ treated_post + treated_post:cap_change_ratio + factor(age_12) + factor(educ) | prov + ym, cluster = ~prov, data = micro)
 
-# Compute effect at median capacity
+# Compute effect at median capacity 
 median_cap <- median(cap_merge$cap_change_ratio, na.rm = TRUE)
 coef_m2 <- coef(m2)
 med_effect <- coef_m2['treated_post']
 int_effect <- coef_m2['treated_post:cap_change_ratio']
 effect_at_median <- med_effect + int_effect * median_cap
 
-# Bootstrap function
+# Bootstrap function to compute effect at median capacity 
 compute_effect <- function(data){
   m2_boot <- feols(in_lfp ~ treated_post + treated_post:cap_change_ratio + factor(age_12) + factor(educ) | prov + ym, cluster = ~prov, data = data)
   coefs <- coef(m2_boot)
@@ -70,8 +70,8 @@ compute_effect <- function(data){
 }
 
 # Run bootstrap
-set.seed(2026)
-B <- 500
+set.seed(2026) # could be literally any other number. Serves to randomize sampling
+B <- 500 # could be a lot bigger as well, but that would take a longer time to run
 provs <- unique(micro$prov)
 boot_est <- numeric(B)
 for(b in seq_len(B)){
@@ -80,7 +80,7 @@ for(b in seq_len(B)){
   boot_est[b] <- tryCatch(compute_effect(boot_data), error = function(e) NA_real_)
 }
 
-# Summaries
+# Summaries of bootstrap estimates
 est_mean <- mean(boot_est, na.rm = TRUE)
 est_se <- sd(boot_est, na.rm = TRUE)
 ci_low <- quantile(boot_est, 0.025, na.rm = TRUE)
@@ -116,5 +116,3 @@ write_csv(data.frame(effect_at_median = effect_at_median, median_cap = median_ca
 # Bootstrap results
 write_csv(tibble(boot_est = boot_est), 'output/results/capacity_mediation_bootstrap_estimates.csv')
 write_csv(tibble(est_mean = est_mean, est_se = est_se, ci_low = ci_low, ci_high = ci_high), 'output/results/capacity_mediation_bootstrap_summary.csv')
-
-# Capacity mediation analysis completed: point estimates and bootstrap results saved to output/results/

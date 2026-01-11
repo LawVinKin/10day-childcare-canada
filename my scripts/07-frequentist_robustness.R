@@ -1,19 +1,23 @@
 # In this script, we run frequentist robustness checks using mixed-effects models
-# and fixed-effects alternatives to validate the main DiD results
+# and fixed-effects alternatives to validate the main DiD results.
+# In more simple terms, we will fit generalized linear mixed models (GLMMs)
+# with random effects for provinces and treatment cohorts to see if results hold up.
+# Additionally, we will compute minimum detectable effects (MDEs) for the analysis.
+# In simple terms, the MDEs are the smallest effect sizes we could reliably detect
+# given our sample size and data structure.
 
-#!/usr/bin/env Rscript
-options(stringsAsFactors = FALSE)
-# Starting lower-cost pivot analyses: glmer robustness + MDEs
+options(stringsAsFactors = FALSE) # if you are using an older R version, set stringsAsFactors to FALSE to avoid issues with strings being factors
 
 library(tidyverse)
-library(lme4)
-library(broom.mixed)
+library(lme4) # needed for glmer, which is used for mixed-effects models
+library(broom.mixed) # for tidying mixed model outputs
 
 setwd("..")
 
 df <- readRDS("data/02-processed/analysis_dataset.rds")
 
-# Ensure `cohort` variable exists for mixed-effects models
+# The following function simply ensure that the cohort variable exists.
+# If it does not exist, we create it from treatment_group / treatment_date.
 if (!"cohort" %in% names(df)) {
   df <- df %>%
     mutate(cohort = if_else(treatment_group == "Never_Treated", "Never_Treated", as.character(treatment_date))) %>%  # create cohort from treatment group/date
@@ -23,51 +27,13 @@ if (!"cohort" %in% names(df)) {
 
 dir.create("output/results", showWarnings = FALSE, recursive = TRUE)
 
-# 1) Frequentist hierarchical robustness: glmer mixed-effects model
-fit_glmer <- NULL
-# Attempting to fit glmer mixed-effects logistic model (may take a minute)...
-glmer_err <- NULL
-tryCatch({
-  fit_glmer <- glmer(  # generalized linear mixed model
-    in_lfp ~ post * is_treated_province + (1 | prov) + (1 + post | cohort),  # random intercepts for province and cohort, random slope for post in cohort
-    data = df,
-    family = binomial(link = "logit"),  # logistic regression for binary outcome
-    control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE, optCtrl = list(maxfun = 2e5))  # robust optimizer
-  )
-  saveRDS(fit_glmer, file = "output/results/fit_cohort_glmer.rds")
-  # Saved glmer fit to output/results/fit_cohort_glmer.rds
-  tidy_glmer <- broom.mixed::tidy(fit_glmer, effects = "fixed")  # extract fixed effects
-  write_csv(tidy_glmer, "output/results/fit_cohort_glmer_tidy.csv")
-  # Saved tidy glmer summary to output/results/fit_cohort_glmer_tidy.csv
-}, error = function(e) {
-  glmer_err <<- conditionMessage(e)
-  # glmer failed: see glmer_err
-})
-
-# If glmer fails, fall back to fixed-effects model
-if (is.null(fit_glmer)) {
-  # Falling back to a fixed-effects logistic approximation.
-  if (requireNamespace("fixest", quietly = TRUE)) {
-    # Using fixest::feglm as fallback (clustered SEs)
-    library(fixest)
-    # Use province and cohort as fixed effects and cluster by province
-    fit_fe <- feglm(in_lfp ~ post * is_treated_province | prov + cohort, data = df, family = binomial(), cluster = ~prov)
-    saveRDS(fit_fe, file = "output/results/fit_cohort_fe.rds")
-    write_csv(as_tibble(summary(fit_fe)$coeftable, rownames = "term"), "output/results/fit_cohort_fe_tidy.csv")
-    # Saved fixest fallback fit to output/results/fit_cohort_fe.rds and tidy CSV
-  } else {
-    # fixest not available: falling back to GLM with province and cohort dummies (may be large).
-    # Build formula with factor dummies (may be heavy); use glm as last resort
-    df$prov_f <- factor(df$prov)
-    df$cohort_f <- factor(df$cohort)
-    formula_glm <- as.formula("in_lfp ~ post * is_treated_province + prov_f + cohort_f")
-    fit_glm_fe <- glm(formula_glm, data = df, family = binomial())
-    saveRDS(fit_glm_fe, file = "output/results/fit_cohort_glm_fe.rds")
-    tidy_glm_fe <- broom::tidy(fit_glm_fe)
-    write_csv(tidy(fit_glm_fe), "output/results/fit_cohort_glm_fe_tidy.csv")
-    # Saved glm fallback fit to output/results/fit_cohort_glm_fe.rds and tidy CSV
-  }
-}
+# 1) Frequentist hierarchical robustness: fixed-effects model with fixest
+library(fixest)
+# Use province and cohort as fixed effects and cluster by province
+fit_fe <- feglm(in_lfp ~ post * is_treated_province | prov + cohort, data = df, family = binomial(), cluster = ~prov)
+saveRDS(fit_fe, file = "output/results/fit_cohort_fe.rds")
+write_csv(as_tibble(summary(fit_fe)$coeftable, rownames = "term"), "output/results/fit_cohort_fe_tidy.csv")
+# Saved fixest fit to output/results/fit_cohort_fe.rds and tidy CSV
 
 # 2) MDE / power table (approximate two-sample proportion MDEs)
 # Computing approximate MDEs for binary outcome (individual-level approximation)
@@ -92,6 +58,7 @@ if (n_min < 10) {
 }
 
 # Analytic approximation to two-sample proportion MDE (two-sided alpha=0.05, power=0.8)
+# alpha is the significance level, power is the desired power level, z_alpha and z_power are the corresponding z-scores
 alpha <- 0.05
 power_target <- 0.8
 z_alpha <- qnorm(1 - alpha / 2)
@@ -130,6 +97,3 @@ diag <- list(
   mde = mde_tbl$mde_absolute
 )
 writeLines(jsonlite::toJSON(diag, auto_unbox = TRUE, pretty = TRUE), "output/results/pivot_diag.json")
-# Wrote diagnostics to output/results/pivot_diag.json
-
-# Lower-cost pivot analyses complete. Results in output/results/
