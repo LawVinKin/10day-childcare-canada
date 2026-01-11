@@ -1,11 +1,12 @@
-# this script performs the stacked DiD but does so with
-# childcare capacity subgroups included (these are simply "high capacity" and "low capacity")
+# In this script, we run stacked DiD analyses including capacity subgroups
+# to examine heterogeneity by baseline childcare capacity levels
+
 library(did)
 library(tidyverse)
 
 setwd("..")
 
-source("my scripts/04-stacked_did_analysis.R")
+source("my scripts/04-stacked_did_analysis.R")  # load functions from main DiD script
 
 load_and_prepare_data <- function() {
   analysis_data <- read_rds("data/03-analysis_data/processed/analysis_data_stacked_with_capacity.rds")

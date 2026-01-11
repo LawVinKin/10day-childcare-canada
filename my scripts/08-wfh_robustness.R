@@ -1,4 +1,6 @@
-# Clean, runnable WFH robustness script
+# In this script, we run work-from-home (WFH) robustness checks
+# to test if WFH-amenable occupations confound the childcare policy effects
+
 library(dplyr)
 library(fixest)
 library(broom)

@@ -1,13 +1,13 @@
-# This script generates event study and heterogeneity plots from stacked DiD results
+# In this script, we generate event study and heterogeneity plots from the stacked DiD results
 
 library(tidyverse)
 library(ggplot2)
-library(showtext) # this is for custom fonts; not needed if using default fonts
+library(showtext) # for custom fonts
 
 setwd("..")
 
-showtext_auto()
-font_add("Times New Roman", regular = "/System/Library/Fonts/Supplemental/Times New Roman.ttf")
+showtext_auto()  # enable custom fonts
+font_add("Times New Roman", regular = "/System/Library/Fonts/Supplemental/Times New Roman.ttf")  # add Times New Roman font
 
 dir.create("output/figures", showWarnings = FALSE, recursive = TRUE)
 

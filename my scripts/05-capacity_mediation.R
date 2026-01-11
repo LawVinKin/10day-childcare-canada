@@ -1,6 +1,6 @@
-# Capacity Mediation Analysis
-# This script performs capacity mediation analysis for the childcare policy effect on maternal LFP.
-# It includes point estimates and bootstrap inference.
+# In this script, we perform capacity mediation analysis to test if childcare capacity changes
+# mediate the effect of the policy on maternal labor force participation.
+# We estimate point effects and bootstrap for inference.
 
 library(dplyr)
 library(fixest)

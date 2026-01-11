@@ -1,22 +1,24 @@
-# If you do not have the 'did' package install, install it via: install.packages("did")
+# In this script, we run the main stacked difference-in-differences analysis
+# using the 'did' package to estimate treatment effects on maternal labor force participation
+
+# Install 'did' package if needed: install.packages("did")
 library(did)
 library(tidyverse)
 
 setwd("..")
 
-# Use the processed stacked dataset (includes capacity and subgroup indicators)
+# Load the prepared dataset with capacity and subgroups
 analysis_data <- read_rds("data/03-analysis_data/processed/analysis_data_stacked_with_capacity.rds")
 
-# Create period and treatment cohort vars from date/treatment_date if missing
+# Create numeric period and cohort variables required by the did package
 analysis_data <- analysis_data %>%
   mutate(
-    period = as.integer(format(as.Date(date), "%Y")) * 100 + as.integer(format(as.Date(date), "%m")),
-    treatment_period_cohort = ifelse(is.na(treatment_date), NA_integer_, as.integer(format(as.Date(treatment_date), "%Y")) * 100 + as.integer(format(as.Date(treatment_date), "%m"))),
-    unit_id = row_number()
+    period = as.integer(format(as.Date(date), "%Y")) * 100 + as.integer(format(as.Date(date), "%m")),  # yyyymm format
+    treatment_period_cohort = ifelse(is.na(treatment_date), NA_integer_, as.integer(format(as.Date(treatment_date), "%Y")) * 100 + as.integer(format(as.Date(treatment_date), "%m"))),  # treatment cohort in yyyymm
+    unit_id = row_number()  # unique ID for each observation
   )
 
-# in the code below, we convert the yyyymm format to a 
-# numeric month number since January 2019
+# Function to convert yyyymm to month number since January 2019 (for did package)
 yyyymm_to_month_num <- function(yyyymm) {
   # Return NA for missing inputs, otherwise compute month index since Jan 2019
   ifelse(is.na(yyyymm), NA_integer_, {
@@ -26,35 +28,32 @@ yyyymm_to_month_num <- function(yyyymm) {
   })
 }
 
+# Add sequential period and cohort variables
 analysis_data <- analysis_data %>%
   mutate(
-    period_seq = yyyymm_to_month_num(period),
-    treatment_period_cohort_seq = yyyymm_to_month_num(treatment_period_cohort))
+    period_seq = yyyymm_to_month_num(period),  # sequential month number
+    treatment_period_cohort_seq = yyyymm_to_month_num(treatment_period_cohort))  # sequential treatment month
 
-# the following loop runs the stacked DID analysis for various subgroups
-# the difference in code with the stacked and regular analysis is that
-# we use period_seq and treatment_period_cohort_seq instead of date variables
-# this ensures that the time periods are aligned correctly in the stacked DID design
-# the stacked did design requires these numeric period variables
+# Function to run stacked DiD for a subgroup
 run_stacked_did <- function(data, subgroup_name = "Full Sample") {
-  att_results <- att_gt( # the att_gt function runs the stacked DID estimation
-    yname = "in_lfp",
-    tname = "period_seq",
-    idname = "unit_id",
-    gname = "treatment_period_cohort_seq",
+  att_results <- att_gt(  # estimate group-time ATT using did package
+    yname = "in_lfp",  # outcome: labor force participation
+    tname = "period_seq",  # time variable
+    idname = "unit_id",  # unit ID
+    gname = "treatment_period_cohort_seq",  # treatment cohort
     data = data,
-    est_method = "dr", # "dr" is the doubly-robust estimator, which is helpful because of covariate adjustment
-    control_group = "notyettreated", 
-    panel = FALSE,
-    clustervar = "prov"
+    est_method = "dr",  # doubly-robust estimator
+    control_group = "notyettreated",  # control group type
+    panel = FALSE,  # repeated cross-section
+    clustervar = "prov"  # cluster SEs by province
   )
   
-  att_agg_simple <- aggte(att_results, type = "simple") # this aggregates the ATT results into a single overall estimate
+  att_agg_simple <- aggte(att_results, type = "simple")  # aggregate to overall ATT
   
-  estimate_val <- att_agg_simple$overall.att 
-  se_val <- att_agg_simple$overall.se
-  t_stat <- estimate_val / se_val
-  p_val <- 2 * pnorm(-abs(t_stat))
+  estimate_val <- att_agg_simple$overall.att  # extract estimate
+  se_val <- att_agg_simple$overall.se  # extract SE
+  t_stat <- estimate_val / se_val  # t-statistic
+  p_val <- 2 * pnorm(-abs(t_stat))  # p-value
   
   tibble( # this tibble summarizes the results
     subgroup = subgroup_name,

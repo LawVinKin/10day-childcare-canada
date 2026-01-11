@@ -1,3 +1,6 @@
+# In this script, we run frequentist robustness checks using mixed-effects models
+# and fixed-effects alternatives to validate the main DiD results
+
 #!/usr/bin/env Rscript
 options(stringsAsFactors = FALSE)
 print("Starting lower-cost pivot analyses: glmer robustness + MDEs")
