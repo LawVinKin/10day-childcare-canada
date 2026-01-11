@@ -1,7 +1,9 @@
-library(tidyverse)
-library(haven)
+# In this script, we will clean and combine monthly Labour Force Survey (LFS) data files
+# to create a single dataset focused on maternal labour force participation and occupation codes
 
-setwd("..")
+library(tidyverse)
+
+setwd("..") # set your own working directory here
 
 lfs_files <- list.files("data/01-raw_data/raw", pattern = "^LFS_.*\\.RData$", full.names = TRUE)
 

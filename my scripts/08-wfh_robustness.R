@@ -1,5 +1,4 @@
 # Clean, runnable WFH robustness script
-library(data.table)
 library(dplyr)
 library(fixest)
 library(broom)
