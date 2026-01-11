@@ -13,30 +13,30 @@ setwd("..")
 
 df <- readRDS("data/02-processed/analysis_dataset.rds")
 
-# Ensure `cohort` exists
+# Ensure `cohort` variable exists for mixed-effects models
 if (!"cohort" %in% names(df)) {
   df <- df %>%
-    mutate(cohort = if_else(treatment_group == "Never_Treated", "Never_Treated", as.character(treatment_date))) %>%
-    mutate(cohort = as.factor(cohort))
+    mutate(cohort = if_else(treatment_group == "Never_Treated", "Never_Treated", as.character(treatment_date))) %>%  # create cohort from treatment group/date
+    mutate(cohort = as.factor(cohort))  # convert to factor for modeling
   print("Created cohort variable from treatment_group/treatment_date")
 }
 
 dir.create("output/results", showWarnings = FALSE, recursive = TRUE)
 
-# 1) Frequentist hierarchical robustness: glmer
+# 1) Frequentist hierarchical robustness: glmer mixed-effects model
 fit_glmer <- NULL
 print("Attempting to fit glmer mixed-effects logistic model (may take a minute)...")
 glmer_err <- NULL
 tryCatch({
-  fit_glmer <- glmer(
-    in_lfp ~ post * is_treated_province + (1 | prov) + (1 + post | cohort),
+  fit_glmer <- glmer(  # generalized linear mixed model
+    in_lfp ~ post * is_treated_province + (1 | prov) + (1 + post | cohort),  # random intercepts for province and cohort, random slope for post in cohort
     data = df,
-    family = binomial(link = "logit"),
-    control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE, optCtrl = list(maxfun = 2e5))
+    family = binomial(link = "logit"),  # logistic regression for binary outcome
+    control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE, optCtrl = list(maxfun = 2e5))  # robust optimizer
   )
   saveRDS(fit_glmer, file = "output/results/fit_cohort_glmer.rds")
   print("Saved glmer fit to output/results/fit_cohort_glmer.rds")
-  tidy_glmer <- broom.mixed::tidy(fit_glmer, effects = "fixed")
+  tidy_glmer <- broom.mixed::tidy(fit_glmer, effects = "fixed")  # extract fixed effects
   write_csv(tidy_glmer, "output/results/fit_cohort_glmer_tidy.csv")
   print("Saved tidy glmer summary to output/results/fit_cohort_glmer_tidy.csv")
 }, error = function(e) {
@@ -44,6 +44,7 @@ tryCatch({
   print("glmer failed: ", glmer_err)
 })
 
+# If glmer fails, fall back to fixed-effects model
 if (is.null(fit_glmer)) {
   print("Falling back to a fixed-effects logistic approximation.")
   if (requireNamespace("fixest", quietly = TRUE)) {

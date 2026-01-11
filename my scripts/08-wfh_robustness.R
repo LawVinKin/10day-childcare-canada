@@ -8,41 +8,42 @@ library(readr)
 
 setwd("..")
 
-# Read data
+# Read the analysis dataset
 df <- readRDS("data/02-processed/analysis_dataset.rds")
 
-# Construct treatment_dummy if absent
+# Ensure treatment_dummy variable exists (indicator for treated province post-treatment)
 if(!"treatment_dummy" %in% names(df)){
   if(all(c("is_treated_province", "post") %in% names(df))){
-    df <- df %>% mutate(treatment_dummy = as.integer(is_treated_province & post))
+    df <- df %>% mutate(treatment_dummy = as.integer(is_treated_province & post))  # 1 if treated province and post-period
   } else {
     stop("treatment_dummy missing and cannot be constructed")
   }
 }
 
-# Build WFH flag (heuristic)
+# Build WFH flag based on occupation major groups (heuristic for WFH amenability)
 if(!"occ_major" %in% names(df) & !"occ_code" %in% names(df)){
-  df$wfh_flag <- NA_integer_
+  df$wfh_flag <- NA_integer_  # set to NA if no occupation data
 } else {
-  df <- df %>% mutate(wfh_flag = ifelse(occ_major %in% c("Managers", "Professionals"), 1L, 0L))
+  df <- df %>% mutate(wfh_flag = ifelse(occ_major %in% c("Managers", "Professionals"), 1L, 0L))  # 1 for managers/professionals
 }
 
+# Create year-month variable for fixed effects
 if(!"ym" %in% names(df)) df <- df %>% mutate(ym = format(as.Date(date), "%Y-%m"))
-df <- df %>% mutate(prov = as.factor(prov))
+df <- df %>% mutate(prov = as.factor(prov))  # ensure province is factor
 
 dir.create('output/results', showWarnings = FALSE, recursive = TRUE)
 
-# Summary of WFH by province
+# Create summary of WFH proportions by province
 wfh_by_prov <- df %>% group_by(prov) %>% summarise(n = n(), prop_wfh = mean(wfh_flag, na.rm = TRUE), n_missing = sum(is.na(wfh_flag)), .groups = 'drop')
 write_csv(wfh_by_prov, 'output/results/wfh_by_prov_summary.csv')
 
-# Determine whether triple-diff is feasible (some within-province variation)
+# Check if there's within-province variation in WFH (needed for triple-diff)
 has_within_variation <- any(wfh_by_prov$prop_wfh > 0 & wfh_by_prov$prop_wfh < 1, na.rm = TRUE)
 
+# If variation exists, run triple-difference model: treatment * WFH interaction
 if(has_within_variation){
-  # Try triple-diff and capture warnings/errors
   td_fit <- tryCatch(
-    feols(in_lfp ~ treatment_dummy * wfh_flag + age_12 + educ | prov + ym, cluster = ~prov, data = df),
+    feols(in_lfp ~ treatment_dummy * wfh_flag + age_12 + educ | prov + ym, cluster = ~prov, data = df),  # triple-diff with controls
     error = function(e) e,
     warning = function(w) w
   )
