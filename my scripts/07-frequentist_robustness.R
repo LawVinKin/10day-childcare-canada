@@ -3,7 +3,7 @@
 
 #!/usr/bin/env Rscript
 options(stringsAsFactors = FALSE)
-print("Starting lower-cost pivot analyses: glmer robustness + MDEs")
+# Starting lower-cost pivot analyses: glmer robustness + MDEs
 
 library(tidyverse)
 library(lme4)
@@ -18,14 +18,14 @@ if (!"cohort" %in% names(df)) {
   df <- df %>%
     mutate(cohort = if_else(treatment_group == "Never_Treated", "Never_Treated", as.character(treatment_date))) %>%  # create cohort from treatment group/date
     mutate(cohort = as.factor(cohort))  # convert to factor for modeling
-  print("Created cohort variable from treatment_group/treatment_date")
+  # Created cohort variable from treatment_group/treatment_date
 }
 
 dir.create("output/results", showWarnings = FALSE, recursive = TRUE)
 
 # 1) Frequentist hierarchical robustness: glmer mixed-effects model
 fit_glmer <- NULL
-print("Attempting to fit glmer mixed-effects logistic model (may take a minute)...")
+# Attempting to fit glmer mixed-effects logistic model (may take a minute)...
 glmer_err <- NULL
 tryCatch({
   fit_glmer <- glmer(  # generalized linear mixed model
@@ -35,28 +35,28 @@ tryCatch({
     control = glmerControl(optimizer = "bobyqa", calc.derivs = FALSE, optCtrl = list(maxfun = 2e5))  # robust optimizer
   )
   saveRDS(fit_glmer, file = "output/results/fit_cohort_glmer.rds")
-  print("Saved glmer fit to output/results/fit_cohort_glmer.rds")
+  # Saved glmer fit to output/results/fit_cohort_glmer.rds
   tidy_glmer <- broom.mixed::tidy(fit_glmer, effects = "fixed")  # extract fixed effects
   write_csv(tidy_glmer, "output/results/fit_cohort_glmer_tidy.csv")
-  print("Saved tidy glmer summary to output/results/fit_cohort_glmer_tidy.csv")
+  # Saved tidy glmer summary to output/results/fit_cohort_glmer_tidy.csv
 }, error = function(e) {
   glmer_err <<- conditionMessage(e)
-  print("glmer failed: ", glmer_err)
+  # glmer failed: see glmer_err
 })
 
 # If glmer fails, fall back to fixed-effects model
 if (is.null(fit_glmer)) {
-  print("Falling back to a fixed-effects logistic approximation.")
+  # Falling back to a fixed-effects logistic approximation.
   if (requireNamespace("fixest", quietly = TRUE)) {
-    print("Using fixest::feglm as fallback (clustered SEs)")
+    # Using fixest::feglm as fallback (clustered SEs)
     library(fixest)
     # Use province and cohort as fixed effects and cluster by province
     fit_fe <- feglm(in_lfp ~ post * is_treated_province | prov + cohort, data = df, family = binomial(), cluster = ~prov)
     saveRDS(fit_fe, file = "output/results/fit_cohort_fe.rds")
     write_csv(as_tibble(summary(fit_fe)$coeftable, rownames = "term"), "output/results/fit_cohort_fe_tidy.csv")
-    print("Saved fixest fallback fit to output/results/fit_cohort_fe.rds and tidy CSV")
+    # Saved fixest fallback fit to output/results/fit_cohort_fe.rds and tidy CSV
   } else {
-    print("fixest not available: falling back to GLM with province and cohort dummies (may be large).")
+    # fixest not available: falling back to GLM with province and cohort dummies (may be large).
     # Build formula with factor dummies (may be heavy); use glm as last resort
     df$prov_f <- factor(df$prov)
     df$cohort_f <- factor(df$cohort)
@@ -64,13 +64,13 @@ if (is.null(fit_glmer)) {
     fit_glm_fe <- glm(formula_glm, data = df, family = binomial())
     saveRDS(fit_glm_fe, file = "output/results/fit_cohort_glm_fe.rds")
     tidy_glm_fe <- broom::tidy(fit_glm_fe)
-    write_csv(tidy_glm_fe, "output/results/fit_cohort_glm_fe_tidy.csv")
-    print("Saved glm fallback fit to output/results/fit_cohort_glm_fe.rds and tidy CSV")
+    write_csv(tidy(fit_glm_fe), "output/results/fit_cohort_glm_fe_tidy.csv")
+    # Saved glm fallback fit to output/results/fit_cohort_glm_fe.rds and tidy CSV
   }
 }
 
 # 2) MDE / power table (approximate two-sample proportion MDEs)
-print("Computing approximate MDEs for binary outcome (individual-level approximation)")
+# Computing approximate MDEs for binary outcome (individual-level approximation)
 
 # Baseline proportion: average in pre-period among control provinces
 pre_control <- df %>% filter(post == 0 & is_treated_province == 0)
@@ -119,7 +119,7 @@ mde_tbl <- tibble(
 )
 
 write_csv(mde_tbl, "output/results/mde_table.csv")
-print("Saved approximate MDE table to output/results/mde_table.csv")
+# Saved approximate MDE table to output/results/mde_table.csv
 
 # 3) Save a short diagnostics summary
 diag <- list(
@@ -130,6 +130,6 @@ diag <- list(
   mde = mde_tbl$mde_absolute
 )
 writeLines(jsonlite::toJSON(diag, auto_unbox = TRUE, pretty = TRUE), "output/results/pivot_diag.json")
-print("Wrote diagnostics to output/results/pivot_diag.json")
+# Wrote diagnostics to output/results/pivot_diag.json
 
-print("Lower-cost pivot analyses complete. Results in output/results/")
+# Lower-cost pivot analyses complete. Results in output/results/

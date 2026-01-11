@@ -2,7 +2,7 @@
 # to create a single dataset focused on maternal labour force participation and occupation codes
 
 library(tidyverse)
-library(haven)
+library(haven) # for reading .RData files
 
 setwd("..") # set your own working directory here
 

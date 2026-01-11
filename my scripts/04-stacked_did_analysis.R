@@ -109,21 +109,21 @@ if ("lone_parent" %in% names(analysis_data) && length(unique(na.omit(analysis_da
   stacked_results_list[[length(stacked_results_list) + 1]] <- run_stacked_did(analysis_data %>% filter(lone_parent == 1), "Lone Parent")
   stacked_results_list[[length(stacked_results_list) + 1]] <- run_stacked_did(analysis_data %>% filter(lone_parent == 0), "Not Lone Parent")
 } else {
-  print("Skipping lone_parent subgroup: variable absent or no variation.")
+  # Skipping lone_parent subgroup: variable absent or no variation
 }
 
 if ("educ_high" %in% names(analysis_data) && length(unique(na.omit(analysis_data$educ_high))) > 1) {
   stacked_results_list[[length(stacked_results_list) + 1]] <- run_stacked_did(analysis_data %>% filter(educ_high == 1), "High Education")
   stacked_results_list[[length(stacked_results_list) + 1]] <- run_stacked_did(analysis_data %>% filter(educ_high == 0), "Low Education")
 } else {
-  print("Skipping educ_high subgroup: variable absent or no variation.")
+  # Skipping educ_high subgroup: variable absent or no variation
 }
 
 if ("age_younger" %in% names(analysis_data) && length(unique(na.omit(analysis_data$age_younger))) > 1) {
   stacked_results_list[[length(stacked_results_list) + 1]] <- run_stacked_did(analysis_data %>% filter(age_younger == 1), "Younger (25-34)")
   stacked_results_list[[length(stacked_results_list) + 1]] <- run_stacked_did(analysis_data %>% filter(age_younger == 0), "Older (35-44)")
 } else {
-  print("Skipping age_younger subgroup: variable absent or no variation.")
+  # Skipping age_younger subgroup: variable absent or no variation
 }
 
 all_stacked_results <- bind_rows(stacked_results_list)

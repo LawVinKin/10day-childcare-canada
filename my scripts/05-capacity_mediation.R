@@ -117,4 +117,4 @@ write_csv(data.frame(effect_at_median = effect_at_median, median_cap = median_ca
 write_csv(tibble(boot_est = boot_est), 'output/results/capacity_mediation_bootstrap_estimates.csv')
 write_csv(tibble(est_mean = est_mean, est_se = est_se, ci_low = ci_low, ci_high = ci_high), 'output/results/capacity_mediation_bootstrap_summary.csv')
 
-print("Capacity mediation analysis completed: point estimates and bootstrap results saved to output/results/")
+# Capacity mediation analysis completed: point estimates and bootstrap results saved to output/results/

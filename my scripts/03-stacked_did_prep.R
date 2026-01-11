@@ -36,9 +36,9 @@ final_data <- analysis_with_capacity %>%
   select(-median_baseline)  # remove temporary median column
 
 # Create subgroup indicators for heterogeneity analysis
-# - lone_parent: 1 if single/lone parent, 0 otherwise
-# - educ_high: 1 if bachelor's or higher education, 0 otherwise  
-# - age_younger: 1 if age 25-34, 0 otherwise
+# lone_parent: 1 if single/lone parent, 0 otherwise
+# educ_high: 1 if bachelor's or higher education, 0 otherwise  
+# age_younger: 1 if age 25-34, 0 otherwise
 final_data <- final_data %>%
   mutate(
     efamtype_lbl = suppressWarnings(as.character(as_factor(efamtype))),  # convert labelled to string
