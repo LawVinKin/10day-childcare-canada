@@ -12,7 +12,8 @@ load_data <- function() {
   list(lfs = lfs_data, treatment = treatment_df)
 }
 
-# Function to create a mapping from province names to numeric codes used in LFS
+# Function to create a mapping from province names to numeric codes used in LFS.
+# the provincial codes are widely available everywhere :)
 get_province_code_map <- function() {
   tribble(
     ~province, ~prov_code,
@@ -32,6 +33,7 @@ get_province_code_map <- function() {
 }
 
 # Function to add province codes to the treatment data for merging
+# so that we can join on numeric province codes
 process_treatments <- function(treatment_df, province_code_map) {
   treatment_with_codes <- treatment_df %>%
     left_join(province_code_map, by = "province")  # join to get numeric codes
@@ -43,6 +45,7 @@ process_treatments <- function(treatment_df, province_code_map) {
 }
 
 # Function to merge LFS data with treatment info and create key variables
+# such as treatment indicators and groups
 join_and_create_variables <- function(lfs_data, treatment_selected) {
   analysis_data <- lfs_data %>%
     left_join(treatment_selected, by = c("prov" = "prov_code")) %>%  # merge on province code
@@ -67,7 +70,6 @@ select_final_columns <- function(analysis_data) {
   final_analysis_data
 }
 
-# Load data, process, and save
 data <- load_data()
 province_code_map <- get_province_code_map()
 treatment_selected <- process_treatments(data$treatment, province_code_map)
