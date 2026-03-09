@@ -40,9 +40,14 @@ my scripts/
 	07-diagnostics_analysis.R        # diagnostics and data-quality checks
 
 paper/
-	paper.qmd                        # manuscript (Quarto)
+	paper_complete.qmd                        # manuscript (Quarto)
+	paper_complete.pdf
+	practitioners_handbook.qmd				  # practitioner's handbook (Quarto)
+	practitioners_handbook.pdf				  # in pdf
 	references.bib
-	figures/  fonts/ styles/
+	figures/
+		fig_event_study.pdf			# event study figure
+		mermaid-figure.png			# the overall structure of the childcare ecosystem
 
 output/
 	figures/                          # PNG/PDF figures used in paper
@@ -74,5 +79,6 @@ Install the main packages used by the analysis:
 ```r
 install.packages(c("tidyverse", "fixest", "broom", "haven", "did"))
 ```
+
 
 
