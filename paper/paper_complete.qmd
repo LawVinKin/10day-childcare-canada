@@ -50,7 +50,7 @@ library(tidyverse)
 
 The forthcoming document is presented in a manner best-suited to encourage critical inquiry of the methodology and the findings of the study. Consequently, it has erred on the side of being too thorough rather than not enough.
 
-If you are reading this paper as a policy practitioner, please consider consulting the practitioner's handbook. The handbook provides a concise summary of the policy background, main findings, implications and limitations of the study. It also includes a glossary of technical terms and a Q&A section addressing common questions about the research design and results. The handbook is available at:
+If you are reading this paper as a policy practitioner, please consider consulting the practitioner's handbook. The handbook provides a concise summary of the policy background, main findings, implications and limitations of the study. It also includes a glossary of technical terms and a Q&A section addressing common questions about the research design and results. The handbook is available at: https://github.com/LawVinKin/10day-childcare-canada/blob/961eb3a56f16b43b616badc85f82519a38094292/paper/practitioners_handbook.pdf
 :::
 
 # Introduction {#sec-introduction}

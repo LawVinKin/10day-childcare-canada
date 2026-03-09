@@ -344,6 +344,7 @@ In short: "Early evidence is very positive, but we need to sustain investment, m
 A: The full paper is available at: http://dx.doi.org/10.2139/ssrn.5972594
 
 The full paper includes:
+
 - Detailed methodology section explaining stacked DiD, doubly robust estimation, and all specifications
 - Full results tables with confidence intervals
 - Robustness check details (placebo tests, cohort diagnostics, sensitivity analyses)
