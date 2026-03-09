@@ -1,8 +1,8 @@
-# $10/day Childcare Program in Canada
+# Canada's $10/day Childcare Subsidy
 
-This is the repository of the "Stacked Difference-in-Differences Evaluation of Canada's $10-a-Day Childcare Policy: Policy Impact on Maternal Employment".
+This is the repository of the "Stacked Difference-in-Differences Evaluation of Canada's $10-a-Day Childcare Policy: Policy Impact on Maternal Employment", available on SSRN
 
-For the practitioner's handbook, please see the paper folder, and open the PDF file.
+For the practitioner's handbook, please see the paper folder, and open the PDF file. Alternatively, click the following link: 
 
 ## Repository layout (key files & folders)
 
@@ -74,4 +74,5 @@ Install the main packages used by the analysis:
 ```r
 install.packages(c("tidyverse", "fixest", "broom", "haven", "did"))
 ```
+
 
