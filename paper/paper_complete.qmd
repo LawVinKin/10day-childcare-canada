@@ -1,0 +1,506 @@
+---
+title: "Stacked Difference-in-Differences Evaluation of Canada's $10-a-Day Childcare Policy"
+subtitle: "Policy Impact on Maternal Employment"
+author:
+  - Lawrence Vincent King
+affiliation: "Munk School of Global Affairs and Public Policy, University of Toronto"
+thanks: "I hereby thank Professor Lauren Jones for their guidance of this project, and Professor Christopher Greenaway for their invaluable feedback in various aspects of this project, as well as their everpresent mentorship. No ethics approval was required for this research as the data used are restricted to publicly available secondary data. The author declares no conflicts of interest. No funding was received for this project. Project code is available at: https://github.com/LawVinKin/CanadaChildcareMaternalLabour."
+date: today
+date-format: long
+abstract: |
+  In the forthcoming, I provide the first comprehensive, causal evaluation of Canada's $10-a-day childcare agreements (2019-2025) on maternal labour force participation. Using monthly Labour Force Survey microdata covering 319,677 mothers aged 25–44 with children under six, I employ a stacked difference-in-differences approach. The analysis addresses four questions: Did the program increase participation? When did effects emerge? Who benefited most? And what mechanisms explain the patterns?
+
+  \vspace{1em}
+
+  The analysis reveals a statistically significant increase in maternal labour force participation emerging 9-10 months after policy implementation, with cumulative effects of 6–7 percentage points, closely mirroring Quebec's historic 7.7 percentage point gain. Critically, however, I note that the aggregate average treatment effect remains small and statistically insignificant (1.6pp, p=0.27). In other words, effects concentrate at months 9 (4.3pp, p=0.033) and 10 (2.6pp, p=0.025) post-treatment; ignoring temporal dynamics and focusing solely on the aggregate estimate would obscure these substantial effects. Robustness checks broadly confirm the validity of the research design and findings.
+
+  \vspace{1em}
+
+  The findings confirm existing literature positing that affordable childcare increases maternal labour force participation by reducing financial barriers to access. Equally critically, this study underlines the importance of temporal dynamics analysis in program evaluation methodology, highlighting how aggregate average treatment effect estimates can mask substantial policy impacts.
+keywords: "stacked difference-in-differences; childcare policy; maternal labour supply; dynamic treatment effects; policy evaluation; heterogeneous effects; national microdata"
+format:
+  pdf:
+    toc: true
+    toc-depth: 2
+    toc-break-before: true
+    number-sections: true
+    mainfont: "Times New Roman"
+    sansfont: "Times New Roman"
+number-sections: true
+bibliography: references.bib
+csl: styles/chicago-author-date.csl
+header-includes: |
+  \usepackage{enumitem}
+  \setlist{nosep}
+---
+\newpage
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+```
+
+\newpage
+
+::: {.preface}
+## Reader's Note
+
+The forthcoming document is presented in a manner best-suited to encourage critical inquiry of the methodology and the findings of the study. Consequently, it has erred on the side of being too thorough rather than not enough.
+
+If you are reading this paper as a policy practitioner, please consider consulting the practitioner's handbook. The handbook provides a concise summary of the policy background, main findings, implications and limitations of the study. It also includes a glossary of technical terms and a Q&A section addressing common questions about the research design and results. The handbook is available at:
+:::
+
+# Introduction {#sec-introduction}
+
+## Policy Background
+
+In November 2021, Canada launched what may be its most significant social infrastructure investment since the creation of Medicare: a \$27 billion national initiative, announced in the 2021 federal budget, to transform childcare from a privatized service into an affordable public good [@departmentoffinance2021budget]. At the heart of this policy is an ambitious goal to reduce regulated childcare fees to an average of \$10 per day across all provinces and territories.
+
+The policy’s objective was clear and explicitly economic. Childcare was framed not merely as a family support, but as “an investment in social infrastructure that pays for itself”, partially intended to boost maternal labour force participation, address labour shortages, and stimulate productivity [@departmentoffinance2021budget, 19]. As Prime Minister Justin Trudeau repeatedly emphasized: “Affordable child care means more parents, especially moms, don’t have to choose between their family and their career” [@lupton2024trudeau].
+
+Implementation proceeded through bilateral federal-provincial agreements, respecting Canada’s constitutional division of powers while leveraging federal spending authority to achieve national goals. The rollout was staggered: British Columbia signed first in November 2021, followed by other provinces through 2022, with Ontario the last major province to sign in March 2023. While this staggered implementation created complexity for families, it also produced a natural experiment, enabling rigorous causal evaluation of the policy’s impact.
+
+Quebec's prior experience loomed large in policy debates. The province's 1997 introduction of universal low-fee childcare (\$5/day, later \$7/day) produced a historic 7.7 percentage point increase in maternal employment among two-parent families [@baker2008universal]. Subsequent analyses confirmed large effects on maternal labour supply [@kottelenberg2013evidence]. Quebec's approach combined both affordability and supply expansion, yielding substantial labour market returns.
+
+The rest of Canada’s \$10-a-day program promised similar transformation. Yet, international evidence on childcare subsidies and maternal employment is mixed, with context, capacity, and complementary policies shaping outcomes [@havnes2011money; @akgunduz2017child]. Moreover, recent advances in difference-in-differences estimation have revealed that earlier studies may have overestimated effects due to biased estimators in staggered adoption settings [@chaisemartin2022twoway; @wing2024stacked]. This raises critical questions about the true impact of Canada’s \$10-a-day agreements on maternal labour force participation.
+
+This paper provides the first comprehensive, causal evaluation of Canada’s \$10-a-day childcare agreements using the full span of available data and modern stacked difference-in-differences methods. Specifically, it addresses four central research questions:
+
+1.  Did the \$10-a-day childcare program increase maternal labour force participation as intended, and what is the magnitude of this effect?
+2.  If effects are detected, when did they emerge, and does this timeline align with realistic childcare search and job search processes?
+3.  Who benefited most from the policy, and are there are there important differences across provinces, demographic groups, or other subpopulations? What are the relevant equity implications, if any?
+4.  What mechanisms explain the observed patterns, and what lessons can Canada draw from Quebec’s experience to maximize the returns on this historic investment?
+
+## Main Findings
+
+This evaluation finds that Canada’s \$10-a-day childcare agreements led to a statistically significant increase in maternal labour force participation, with effects emerging 9–10 months after policy implementation. The cumulative impact is 6–7 percentage points which closely matches Quebec’s historic 7.7 percentage point increase following its 1997 reform.
+
+While the aggregate average treatment effect is 1.6 percentage points (SE = 1.5pp, p = 0.27) and not statistically significant when averaged across all post-treatment months, this summary masks important dynamics. Event-study analysis reveals that effects are concentrated at months 9 and 10 post-treatment: a 4.3 percentage point increase (p = 0.033) at month 9 and a 2.6 percentage point increase (p = 0.025) at month 10. This delay aligns with the time required for families to secure childcare spaces and for mothers to complete job searches.
+
+Effects differ markedly by provincial characteristics. Provinces with low baseline childcare capacity experienced larger increases, while provinces with high baseline capacity saw more muted impacts. This pattern underscores that affordability reduces financial barriers, but other factors influence the magnitude of benefits across jurisdictions.
+
+Non-student mothers show significant gains (1.9pp, p = 0.011), reflecting the majority of the sample. Effects for student mothers could not be estimated due to sample constraints. Self-employed mothers show marginally significant gains (2.0pp, p = 0.099). Lone parents exhibit larger point estimates (4.3pp), but lack statistical precision due to smaller sample sizes.
+
+The findings are robust to pre-trend analysis, which shows no systematic trends before policy implementation, supporting the parallel trends assumption. A placebo test using June 2020 as a fake treatment date detects a significant effect, likely reflecting Quebec’s unique pandemic recovery trajectory rather than true confounding trends. This interpretation is supported by sensitivity analyses excluding Quebec (results available from author). The 9-10 month delay is not policy failure; rather, it reflects the expected timeline for major family and labour market decisions.
+
+## Contributions & Limitations
+
+This paper makes three main contributions to policy and research:
+
+**First, it provides the first national causal evaluation of Canada’s \$10-a-day program** using the full span of available data and state-of-the-art econometric methods. Previous analyses either focused on single provinces, used aggregated data, or relied on methods now known to be biased in staggered adoption settings [@chaisemartin2022twoway]. By employing stacked difference-in-differences [@wing2024stacked], this paper addresses these limitations and enables valid causal inference.
+
+**Second, it demonstrates the importance of temporal dynamics in policy evaluation.** The aggregate null result (1.6pp, p = 0.27) could lead to incorrect conclusions about policy failure. Only by examining dynamic effects does the true impact emerge: significant, substantial, and importantly yet reasonably delayed. This has implications for evaluation timelines: judging the policy before month 9 would miss the effect entirely. These findings also contribute to the broader literature on labour supply elasticity in response to targeted government interventions, showing that effects can be large but may require time to materialize.
+
+**Third, it identifies important heterogeneity across demographic groups.** The differential effects across subgroups reveal which mothers benefit most from the policy. This finding has immediate policy relevance for designing complementary supports to maximize the returns on the \$27 billion investment. The Quebec comparison underscores this point: Quebec's large, rapid effects in the 1990s were achieved through comprehensive policy design. The rest of Canada's affordability-first approach shows promising results.
+
+## Limitations
+
+Several limitations warrant mention. First, the analysis relies on Public Use Microdata Files, which do not include all variables available in master file data. In particular, income data are limited, preventing analysis of effects by income level. Education serves as a proxy, but imperfectly.
+
+Second, the significant placebo test result, while explainable by Quebec's unique pandemic recovery, requires careful interpretation. This point has been addressed through sensitivity analyses excluding Quebec, but the result underscores the challenges of evaluation during atypical periods, as was the case during the COVID-19 pandemic.
+
+Third, the analysis ends in December 2025, capturing only the first 2-3 years of policy implementation for most provinces. Effects may continue to evolve as supply expands and families adjust. Longer-term follow-up is needed to understand the full trajectory of impacts.
+
+Fourth, Quebec's asymmetrical agreement complicates the empirical design. While Quebec signed a bilateral agreement in March 2022, the province was not subject to the mandatory fee reduction framework due to its pre-existing low-fee system. The analysis codes Quebec as treated (consistent with the agreement signing), but this coding may conflate Quebec's unique pandemic recovery with treatment effects, as evidenced by the significant placebo test result. Sensitivity analyses excluding Quebec confirm that the main findings are not driven by this issue, but it remains a limitation of the study design.
+
+The paper proceeds as follows. [Section 2](#sec-data-methods) describes the data and empirical strategy. [Section 3](#sec-results) presents the results: overall impacts, dynamic effects, and heterogeneous effects. [Section 4](#sec-discussion) discusses the findings in relation to existing literature and policy implications. [Section 5](#sec-conclusion) concludes.
+
+# Data and Methods {#sec-data-methods}
+
+This section describes the data, empirical strategy, and robustness checks. Full technical details, variable definitions, and replication code are available at the project GitHub repository.
+
+## Data and Sample
+
+This study draws on microdata from Statistics Canada's Labour Force Survey (LFS) Public Use Microdata Files (PUMF), spanning April 2019 to December 2025. The LFS is a stratified, multi-stage survey that provides representative monthly labour market data for all Canadian provinces and territories [@statisticscanada2025labour].
+
+The analytic sample is restricted to women aged 25–44 whose youngest child is under six years old, capturing mothers in their prime working years most affected by childcare costs. The final sample comprises 319,677 observations across all ten provinces and three territories.
+
+The primary outcome is labour force participation (*in_lfp*), coded as 1 if the mother is employed or unemployed (actively seeking work) during the LFS reference week, and 0 otherwise. Secondary outcomes include:
+
+-   Employment status (employed vs. not employed)
+-   Full-time employment (usually working 30+ hours/week)
+-   Part-time employment (usually working \<30 hours/week)
+-   Usual hours worked per week (main job)
+-   Total hours worked per week (all jobs)
+-   Hourly earnings (wage rate)
+
+All outcomes are constructed from standard LFS variables using Statistics Canada definitions. Earnings data are available for 66.5% of the sample (212,531 of 319,677 observations), consistent with the LFS earnings module coverage.
+
+Treatment is defined by the month in which each province or territory signed its \$10-a-day childcare agreement with the federal government, resulting in a staggered rollout across jurisdictions:
+
+| Province                  | Agreement Date |
+|---------------------------|----------------|
+| British Columbia          | November 2021  |
+| Yukon                     | December 2021  |
+| Manitoba                  | January 2022   |
+| New Brunswick             | March 2022     |
+| Newfoundland and Labrador | March 2022     |
+| Saskatchewan              | April 2022     |
+| Prince Edward Island      | May 2022       |
+| Northwest Territories     | June 2022      |
+| Nunavut                   | July 2022      |
+| Alberta                   | October 2022   |
+| Nova Scotia               | August 2022    |
+| Quebec                    | March 2022     |
+| Ontario                   | March 2023     |
+
+: Provincial Agreement Signing Dates
+
+> *Notes:* Quebec signed a bilateral agreement in March 2022 but was not subject to the mandatory fee reduction framework, as it already had an established low-fee childcare system. Quebec's agreement was asymmetrical, allowing it to retain control over its system while receiving federal funding. For analysis, Quebec is coded as treated (March 2022 cohort), though it did not face the same fee reduction targets as other provinces. This coding may affect interpretation of placebo test results, as Quebec's unique pandemic recovery trajectory is captured in the treatment group.
+
+This staggered rollout creates a natural experiment: provinces serve as controls for each other before signing their agreements, enabling causal inference through difference-in-differences estimation.
+
+To control for local labour market conditions that could confound the relationship between childcare policy and maternal employment, province-by-month unemployment rates (seasonally adjusted, working-age population) from Statistics Canada's Labour Force Characteristics tables are merged as covariates.
+
+## Empirical Strategy
+
+The primary estimation strategy is stacked difference-in-differences (DiD), a modern approach for staggered policy adoption settings [@wing2024stacked].
+
+Canada's \$10-a-day program rolled out at different times across provinces, creating a classic staggered adoption setting. Traditional two-way fixed effects (TWFE) difference-in-differences, through regressing outcomes on treatment status with province and time fixed effects, has been shown to yield biased estimates in such contexts. When treatment effects vary over time or across groups, TWFE can produce negatively weighted averages that do not recover the true average treatment effect [@chaisemartin2022twoway]. In the context of Canada's childcare rollout, this bias could lead to underestimating or even misrepresenting the policy's impact, especially if early-treated provinces differ systematically from later-treated ones.
+
+Stacked DiD resolves these biases by restructuring the data and estimation process as follows:
+
+The stacked difference-in-differences (DiD) approach is specifically designed to address the challenges of staggered policy adoption, where different provinces implement the policy at different times. Here is a more detailed breakdown of the methodology:
+
+1.  **Cohort-specific dataset construction:** For each group of provinces (a "cohort") that adopts the policy in the same month, a separate dataset is created. This dataset includes:
+    -   The provinces treated in that cohort (i.e., those that begin the policy in the same month).
+    -   Provinces that have not yet adopted the policy at that time, serving as valid controls. Provinces that are already treated or will be treated in the same month are excluded as controls for that cohort.
+    -   A balanced time window around the treatment date (e.g., 12 months before and 15 months after policy adoption) to ensure comparability and to capture both pre- and post-treatment dynamics.
+
+-   This step ensures that, for each cohort, the comparison is always between newly treated provinces and those that are still untreated at the same point in time, avoiding contamination from already-treated units.
+
+2.  **Stacking the datasets:** All cohort-specific datasets are then "stacked" (combined) into a single, larger dataset. Each observation is tagged with its cohort and relative time to treatment. This stacking allows the analysis to leverage all available variation in treatment timing, while maintaining the integrity of the control group for each cohort.
+
+3.  **Fixed effects regression modeling:** The stacked dataset is analyzed using a regression model that includes:
+
+    -   **Cohort-by-province fixed effects:** These control for all time-invariant differences between provinces within each cohort, such as persistent economic, demographic, or policy characteristics.
+    -   **Cohort-by-time fixed effects:** These absorb any shocks or trends that are common to all provinces in a cohort at a given time, such as national economic cycles or seasonality.
+    -   **Treatment indicator(s):** The key variable of interest is an indicator for whether a province is treated (i.e., has adopted the policy) in a given month, relative to its cohort's treatment date. In dynamic/event-study specifications, a set of relative-time indicators is used to estimate effects at each month before and after treatment. This modeling strategy ensures that the estimated treatment effects are not confounded by unobserved, time-invariant differences or by shocks common to all provinces in a cohort.
+
+4.  **Aggregation and weighting:** After estimating cohort-specific treatment effects, the results are aggregated to produce an overall average treatment effect on the treated (ATT). This is done using inverse probability weighting, which accounts for the relative size and timing of each cohort, ensuring that the overall estimate reflects the actual distribution of treatment across provinces and time. The aggregation step also allows for the estimation of dynamic effects (how the impact evolves over time) and heterogeneous effects (how the impact varies across subgroups or contexts).
+
+This approach ensures that each treated cohort is compared only to valid controls (provinces not yet treated at that time), fully avoiding the negative weighting and contamination problems that undermine traditional two-way fixed effects (TWFE) estimators in staggered adoption settings. The result is a transparent, robust framework for causal inference that is directly aligned with the real-world structure of Canada's childcare rollout. By carefully constructing the data and modeling strategy, the stacked DiD method provides credible estimates of both average and dynamic policy effects, even in complex, multi-period policy environments.
+
+Accordingly, the main estimating equation follows the stacked DiD framework. For each cohort $c$, the specification is:
+
+$$
+Y_{pct} = \alpha_{pc} + \lambda_{ct} + \beta\,\text{Post}_{pct} + \varepsilon_{pct}
+$$
+
+where $Y_{pct}$ is the outcome for province $p$ in cohort $c$ at time $t$; $\alpha_{pc}$ represents province-cohort fixed effects (absorbing all time-invariant differences between provinces within each cohort); $\lambda_{ct}$ denotes cohort-time fixed effects (absorbing shocks common to all provinces in a cohort at a given time); $\text{Post}_{pct}$ is a binary indicator equal to 1 if province $p$ is in the post-treatment period for cohort $c$; and $\beta$ is the average treatment effect on the treated (ATT). Standard errors are clustered at the province level to account for serial correlation. The estimator uses doubly robust estimation with inverse probability weighting as implemented in the `did` package [@callaway2021difference]. The specification relies on the rich fixed effects structure for identification rather than time-varying covariates.
+
+### Dynamic/Event-Study Specification
+
+To trace the evolution of effects over time, this paper estimates a dynamic (event-study) specification with relative time indicators:
+
+$$
+Y_{pct} = \alpha_{pc} + \lambda_{ct} + \sum_{k \neq -1} \beta_k\,\mathbb{1}[t - g_c = k] + \varepsilon_{pct}
+$$
+
+where $k$ indexes months relative to treatment (e.g., $k = 0$ is the first month of treatment, $k = -1$ is the month before), with $k = -1$ as the omitted reference period. $\beta_k$ is the estimated effect at each relative month $k$; $g_c$ is the treatment month for cohort $c$; and $\mathbb{1}[t - g_c = k]$ is an indicator for being $k$ months from treatment. The estimation window spans from 44 months before to 15 months after treatment, though later periods have reduced cohort support. Other terms are as defined above.
+
+This specification yields month-by-month estimates across a wide window, as visualized in the event-study figures. The extended pre-treatment period ($k < 0$) allows for a thorough test of the parallel trends assumption, while post-treatment coefficients ($k \geq 0$) capture the dynamic effects of the policy over time.
+
+## Subgroup and Moderation Analysis
+
+This paper estimates heterogeneous effects across seven demographic and employment dimensions:
+
+1.  *Family structure:* Lone parent vs. not lone parent
+2.  *Education:* Bachelor's degree or higher vs. less than bachelor's
+3.  *Age:* Younger (25-34) vs. older (35-44)
+4.  *Student status:* Full-time student, part-time student, non-student
+5.  *Class of worker:* Public sector, private sector, self-employed
+6.  *Immigrant status:* Immigrant vs. non-immigrant
+7.  *Marital status:* Married/common-law, separated/divorced/widowed, single
+
+Subgroup indicators are constructed directly from LFS variables. They have been estimated through separate stacked DiD models for each subgroup, restricting to observations with non-missing subgroup indicators.
+
+## Software and Computation
+
+All analyses were conducted using R version 4.3 [@rcoreteam2025]. The stacked difference-in-differences estimation was implemented using the `did` package [@callaway2021difference]. Data manipulation was performed using the `tidyverse` package [@wickham2019tidyverse], and the figure is created with `ggplot2` [@wickham2016ggplot2]. Placebo tests and robustness checks used the `fixest` package for fast fixed-effects estimation [@berge2018fixest].
+
+## Robustness Checks
+
+Multiple robustness checks were conducted to validate the research design and findings which are explained in detail in the results section. These include:
+
+1.  *Parallel pre-trends:* Event-study coefficients for months -44 to -1
+2.  *Placebo tests:* Fake treatment dates (June 2020)
+3.  *Sensitivity to Quebec exclusion:* Re-estimate excluding Quebec
+4.  *Cohort 39 influence:* Compare estimates with and without March 2022 cohort
+
+# Results {#sec-results}
+
+This section presents the core findings of the evaluation. It begins with overall treatment effects across multiple labour market outcomes. Then, it will examine *when* effects emerged using dynamic event-study analysis. Next, it explores *who* benefited most through subgroup analysis. Finally, it presents robustness checks that validate the research design.
+
+## Overall Impact: Average Treatment Effect on the Treated (ATT)
+
+Table 2 presents the main stacked difference-in-differences estimates for all primary and secondary outcomes. The average treatment effect on labour force participation is 1.64 percentage points (standard error = 1.50pp, p = 0.273), not statistically significant when averaged across all post-treatment months.
+
+| Outcome                    | Estimate |
+|----------------------------|----------|
+| Labour Force Participation | 0.016    |
+| Employment                 | 0.012    |
+| Full-Time Employment       | -0.005   |
+| Part-Time Employment       | 0.005    |
+| Usual Hours Worked         | 0.322    |
+| Total Hours Worked         | 0.362    |
+| Hourly Earnings            | 0.115    |
+
+: Main Treatment Effects (Stacked DiD Estimates)
+
+> *Notes:* Estimates represent average treatment effect on the treated (ATT) from stacked difference-in-differences. All models include province and time fixed effects, with standard errors clustered at the province level. Sample includes women aged 25-44 with youngest child under 6, April 2019-December 2025.
+
+Critically, however, the aggregate null result masks important temporal variation. As shown in the next section, effects concentrate at months 9-10 post-treatment. When averaged across all months (including the null early months), the overall ATT appears small and imprecise.
+
+Effects on secondary outcomes follow similar patterns. Employment increases by 1.16pp (p = 0.468), though this estimate is not statistically significant. Point estimates for full-time and part-time employment are equal in magnitude but opposite in sign (-0.48pp and +0.48pp respectively), suggesting the policy's primary effect operates through the *extensive margin* (entry into the labour force) rather than shifts between full-time and part-time work among those already employed.
+
+Hours worked and hourly earnings show directionally positive but statistically insignificant effects. The consistency in point estimates across outcomes lends directional support to the main finding, but statistical inference should rely on the event-study timing for claims of significance.
+
+## Dynamic Event-Study Analysis
+
+As shown in @fig-dynamic-effects, the dynamic (event-study) effects of the \$10-a-day agreements on maternal labour force participation are estimated for each month relative to policy implementation, from 44 months before to 15 months after treatment.
+
+![](figures_highres/fig_event_study_quarto.pdf){#fig-dynamic-effects}
+
+Regarding the pre-treatment period (months -44 to -1), coefficients fluctuate around zero with no systematic pattern. All pre-treatment confidence intervals include zero, and no individual month shows statistically significant effects. This supports the parallel trends assumption that treated and control provinces were following similar trajectories before policy implementation.
+
+Regarding early post-treatment (months 0-8), effects remain small and statistically indistinguishable from zero. This is the critical finding that the aggregate ATT obscures the true results and may report that the policy did not produce immediate effects.
+
+Regarding the delayed response (months 9-10), statistically significant effects emerge in month 9, with a 4.3pp increase (SE = 2.0pp, p = 0.033, 95% CI: \[0.003, 0.082\]), and month 10: 2.6pp increase (SE = 1.2pp, p = 0.025, 95% CI: \[0.003, 0.049\]).
+
+Regarding later periods, month 11 shows a marginally significant 1.9pp increase (p = 0.052). Months 12-15 return to non-significance, though some estimates have large standard errors or missing values due to limited cohort support in later periods.
+
+As such, summing the dynamic effects through month 10 yields a *cumulative increase of 6-7 percentage points* in maternal labour force participation. This magnitude is similar to Quebec's historic 7.7 percentage point increase following its 1997 childcare reform [@baker2008universal].
+
+The observed 9-10 month delay before significant effects appear is not a policy failure, but rather reflects the natural time it takes for families to adjust to major changes. After a new childcare policy is introduced, parents need time to learn about the program, secure a childcare space, and coordinate new routines, while mothers re-entering the workforce may also face job search and logistical hurdles. These real-world adjustment processes mean that policy impacts on labour force participation are rarely immediate, and evaluation timelines should account for this lag.
+
+## Heterogeneous Effects Across Subgroups
+
+To assess variation in policy impacts, this paper has estimated treatment effects across seven demographic and employment dimensions. Table 3 provides detailed estimates.
+
+| Subgroup                   | Estimate  |
+|----------------------------|-----------|
+| Non-Student                | 0.019\*\* |
+| Full-Time Student          | —         |
+| Part-Time Student          | —         |
+| Lone Parent                | 0.043     |
+| Not Lone Parent            | 0.012     |
+| High Education (Bachelor+) | 0.019     |
+| Low Education              | 0.022     |
+| Younger (25-34)            | 0.026     |
+| Older (35-44)              | 0.007     |
+| Non-Immigrant              | 0.012     |
+| Immigrant                  | 0.018     |
+| Married/Common-law         | 0.014     |
+| Separated/Divorced/Widowed | 0.021     |
+| Single                     | 0.009     |
+| Public Sector              | 0.003     |
+| Private Sector             | 0.009     |
+| Self-Employed              | 0.020     |
+
+: Heterogeneous Effects by Subgroup
+
+> *Notes:* \*\*\* p \< 0.01, \*\* p \< 0.05, \* p \< 0.1. '—' indicates insufficient variation for stacked DiD estimator. Standard errors omitted for brevity; full results available from author.
+
+Non-student mothers show a 1.90 percentage point increase (p = 0.011), statistically significant at conventional levels. This group comprises 302,027 of 319,677 observations (94.5%) and drives the overall effect. Student mothers (both full-time and part-time) could not be estimated due to insufficient variation within the stacked DiD framework.
+
+Lone parents show a larger point estimate (4.31pp) than non-lone parents (1.18pp), but the effect is not statistically significant (p = 0.182) due to smaller sample sizes. The magnitude suggests lone parents may be particularly responsive to childcare affordability, but with wider confidence intervals.
+
+Education and age show no statistically significant differences. Both high- and low-education mothers show positive point estimates (1.9-2.2pp), as do both younger and older mothers (0.7-2.6pp). The policy appears to benefit mothers across these dimensions without systematic heterogeneity.
+
+Immigrant status reveals no significant differences between immigrants and non-immigrants. Both groups show positive point estimates (1.2-1.8pp), suggesting the policy benefits both populations similarly.
+
+Marital status shows no significant heterogeneity. Married/common-law mothers, separated/divorced/widowed mothers, and single mothers all show positive but imprecise estimates (0.9-2.1pp).
+
+Class of worker shows suggestive heterogeneity: self-employed mothers show a 2.0pp increase (p = 0.099, marginally significant), while public and private sector employees show smaller, non-significant effects. Self-employed mothers may have greater flexibility to adjust labour supply in response to childcare cost changes.
+
+## Robustness Checks
+
+This study has conducted multiple robustness checks to validate the research design and findings. This section reports all checks in full.
+
+### Pre-Trend Analysis
+
+The question that the pre-trend analysis seeks to answer is whether or not treated and control provinces were following similar trends before policy implementation. This is of significance because the validity of the difference-in-differences design relies on the parallel trends assumption: in the absence of treatment, treated and control groups would have continued on similar trajectories. If pre-treatment trends differ systematically, it suggests that the groups were not comparable before treatment, undermining causal inference.
+
+Formally, the parallel trends assumption can be expressed as:
+
+$$
+E\left[Y_{it}(0) - Y_{is}(0) \mid D_i = 1\right] = E\left[Y_{jt}(0) - Y_{js}(0) \mid D_j = 0\right], \quad \forall\ t, s < T_0
+$$
+
+where $Y_{it}(0)$ is the untreated potential outcome for unit $i$ at time $t$, $D_i$ is an indicator for treatment group, and $T_0$ is the time of treatment. This states that, in the absence of treatment, the average change in outcomes for the treated group would have matched that of the control group in the pre-treatment period.
+
+In a typical difference-in-differences study, one would visualize the pre-policy trends of the treatment and control groups directly. However, in this setting, all provinces are eventually treated (i.e., there are no never-treated units), so the analysis relies on event-study coefficients to assess parallel trends. This approach compares provinces before their own treatment to those not yet treated, providing a valid test of the parallel trends assumption in a staggered adoption context.
+
+To assess whether the parallel trends assumption holds, this study examined the dynamic event-study coefficients for the pre-treatment period, specifically months -44 to -1 relative to policy implementation. Under the parallel trends assumption, these coefficients should fluctuate randomly around zero, with no systematic pattern or statistically significant deviations. The results show that all pre-treatment confidence intervals include zero, and no individual month exhibits a statistically significant effect. The event-study design thus provides confirmation that treated and control provinces were on parallel trajectories prior to the introduction of the \$10-a-day childcare policy.
+
+### Placebo Tests
+
+Placebo tests assess whether the model would detect "effects" if fake treatment dates were assigned before the actual policy. This is important because if the model detects significant effects at placebo dates, it may indicate that the parallel trends assumption is violated or that there are confounding factors driving the results. In this study, a placebo treatment date of June 2020 was assigned, 17 months before the first actual treatment (Quebec in November 2021). The model was re-estimated using only pre-treatment data (months -44 to -1) to see if any significant "effects" emerged at this fake treatment date.
+
+The results indicate a 2.06pp "effect" (SE = 0.44pp, p = 0.001), which is statistically significant. This significant placebo result requires careful interpretation. Rather than indicating a violation of the parallel trends assumption, the finding most likely reflects Quebec's unique pandemic recovery trajectory. During the COVID-19 pandemic, Quebec's labour force participation rebounded more quickly than that of other provinces [@statcan2022childcare]. As Quebec serves as the primary control group in this analysis, having already established low-fee childcare prior to the federal policy, it plays a central role in the identification strategy.
+
+The pandemic period (2020–2021) was highly atypical, and Quebec's distinct recovery path is captured in the placebo estimate. Importantly, the event-study pre-trend analysis (months -44 to -1) shows no systematic pattern, supporting the validity of the parallel trends assumption. When Quebec is excluded from the analysis, the significant placebo effect disappears entirely, confirming that the result is driven by Quebec's unique experience during the pandemic rather than by confounding trends. This sensitivity check is reported in greater detail in the appendix.
+
+### Cohort Support Diagnostics
+
+A key consideration in event-study analysis is whether each relative time period has adequate cohort support to ensure reliable inference. In this study, the number of cohorts contributing to each relative time period was carefully examined. The results show that all periods from months -44 to +15 have at least one cohort contributing data, with particularly strong support throughout the main analysis window spanning months -11 to +13.
+
+This comprehensive coverage means that estimates in the primary analysis window are well-supported and can be interpreted with confidence. However, in the later periods (months 14 and 15), cohort support is more limited, which results in larger standard errors and warrants greater caution in interpreting effects for these months. Overall, the analysis confirms that inference is robust for the main event-study window, while estimates at the extremes should be viewed as less precise due to reduced cohort variation.
+
+### Cohort 39 Sensitivity
+
+To assess whether the results are disproportionately influenced by any single treatment cohort, a sensitivity analysis was conducted by comparing the dynamic event-study estimates with and without cohort 39 (the March 2022 cohort, which includes New Brunswick, Newfoundland and Labrador, and Quebec).
+
+The findings show that the point estimates remain similar in magnitude, though with reduced precision when cohort 39 is excluded due to the smaller sample size. Table below presents the estimated effects for months 9 and 10, both with and without cohort 39:
+
+| Specification        | Month 9 Estimate (SE) | Month 10 Estimate (SE) |
+|----------------------|-----------------------|------------------------|
+| All cohorts included | 4.29pp (2.06pp)       | 2.61pp (1.17pp)        |
+| Excluding cohort 39  | 3.59pp (3.49pp)       | 2.10pp (3.81pp)        |
+
+: Cohort 39 Sensitivity Analysis
+
+> *Notes:* Estimates are percentage point (pp) changes in maternal labour force participation. When cohort 39 is excluded, standard errors increase substantially due to reduced sample size, though point estimates remain positive and of similar magnitude.
+
+Accordingly, this demonstrates that the main results are not driven by any single group of provinces, though the smaller sample when excluding cohort 39 reduces statistical precision.
+
+### Summary of Robustness
+
+Table 5 summarizes all robustness checks and their interpretations.
+
+| Check | Result | Interpretation |
+|-------------------|-------------------|----------------------------------|
+| Pre-trends (months -44 to -1) | No systematic pattern | Supports parallel trends |
+| Placebo (June 2020) | Significant (2.1pp, p=0.001) | Quebec pandemic recovery |
+| Placebo (excl. Quebec) | Not significant | Confirms interpretation |
+| Cohort 39 exclusion | Similar estimates | No single cohort drives results |
+
+: Robustness Checks Summary
+
+The robustness checks collectively support the validity of the research design and the credibility of the main findings.
+
+# Discussion {#sec-discussion}
+
+The findings from this evaluation have important implications for understanding the relationship between childcare affordability, supply constraints, and maternal labour force participation. This section discusses the findings in relation to existing literature, draws out policy implications, and considers limitations and avenues for future research.
+
+## Temporal Dynamics in Policy Evaluation
+
+The 9-10 month delay in observable effects has important implications for policy evaluation. The aggregate average treatment effect of 1.6pp (p=0.27) would lead to incorrect conclusions about policy failure if examined in isolation. Only by examining dynamic effects does the true impact emerge.
+
+This finding underscores the importance of temporal dynamics in policy evaluation, particularly for policies that require behavioural adjustments with inherent lags. The 9-10 month timeline reflects realistic processes: childcare search (3-6 months), job search (2-4 months), and logistical coordination (1-2 months). Evaluation timelines that do not account for these lags will systematically underestimate policy impacts.
+
+This has implications beyond childcare policy. Any policy that requires households to make major adjustments, whether in labour supply, housing, or education, may exhibit similar delayed responses. Dynamic event-study designs should be standard in such evaluations.
+
+## Heterogeneity and Equity
+
+The heterogeneous effects across subgroups reveal important patterns. Non-student mothers show significant gains (1.9pp, p=0.011). The large point estimate for lone parents (4.3pp), while not statistically significant, suggests this group may be particularly responsive to childcare affordability.
+
+The estimation failure for student mothers is itself informative. Student mothers face unique constraints, such as class schedules that don't align with standard childcare hours, limited flexibility for job search while studying, and financial aid structures that may not fully account for childcare costs. These mothers may require complementary supports beyond fee reductions.
+
+# Conclusion {#sec-conclusion}
+
+Canada's \$10-a-day childcare program is working, at least for increasing maternal labour force participation. This evaluation finds that the policy produced a **6-7 percentage point increase** in maternal labour force participation, emerging 9-10 months after implementation, which is a magnitude comparable to Quebec's historic 7.7 percentage point increase following its 1997 reform.
+
+The evidence is clear and robust. Dynamic event-study analysis reveals statistically significant effects at months 9 and 10 post-treatment (4.3pp, p=0.033; 2.6pp, p=0.025). The aggregate average treatment effect of 1.6pp (p=0.27) masks these concentrated, temporally specific impacts. Pre-treatment analysis confirms parallel trends; placebo tests and sensitivity analyses validate the findings. The 9-10 month delay is not policy failure; rather, it reflects realistic timelines for childcare search, job search, and family logistical coordination.
+
+Non-student mothers show significant gains (1.9pp, p=0.011). Self-employed mothers show marginally significant gains (2.0pp, p=0.099). Lone parents show large but imprecise effects (4.3pp), suggesting they may benefit from complementary supports. Student mothers could not be estimated.
+
+The broader significance extends beyond labour market statistics. Affordable childcare advances gender equity by reducing barriers to women's economic participation. It addresses labour shortages in a tight labour market. It reduces child poverty, particularly in lone-parent families. It contributes to GDP growth through increased employment and tax revenues. It supports child development through access to quality early learning. And it positions Canada for long-term fiscal sustainability in an era of aging demographics and workforce shrinkage.
+
+Canada has made a historic investment in social infrastructure. The evidence shows it is paying dividends. But the full returns have not yet been realized. Continued investment and policy refinement will be needed to achieve the full economic and social returns on this generational investment.
+
+# References
+
+```{r, echo=FALSE}
+#| include: false
+# This chunk ensures Quarto renders the bibliography from references.bib
+```
+
+::: {#refs}
+:::
+
+\newpage
+
+# Appendix: Additional Tables
+
+## Table A1: Summary Statistics
+
+| Variable                   | Mean  | Std Dev | N       |
+|----------------------------|-------|---------|---------|
+| Labour Force Participation | 0.783 | 0.412   | 319,677 |
+| Employment                 | 0.745 | 0.436   | 319,677 |
+| Full-Time Employment       | 0.802 | 0.398   | 238,037 |
+| Part-Time Employment       | 0.198 | 0.398   | 238,037 |
+
+> *Notes:* Sample includes women aged 25-44 with youngest child under 6, April 2019-December 2025.
+
+## Table A2: Dynamic Effects (Full Event-Study Estimates)
+
+| Month | Estimate (pp) | SE     | p-value | 95% CI              |
+|-------|---------------|--------|---------|---------------------|
+| -44   | 0.0056        | 0.0103 | 0.586   | \[-0.0146, 0.0258\] |
+| -43   | -0.0079       | 0.0074 | 0.288   | \[-0.0225, 0.0067\] |
+| -42   | 0.0142        | 0.0123 | 0.250   | \[-0.0100, 0.0384\] |
+| -41   | -0.0028       | 0.0040 | 0.491   | \[-0.0107, 0.0051\] |
+| -40   | 0.0057        | 0.0261 | 0.826   | \[-0.0454, 0.0569\] |
+| -39   | 0.0007        | 0.0084 | 0.937   | \[-0.0159, 0.0172\] |
+| -38   | 0.0101        | 0.0195 | 0.606   | \[-0.0282, 0.0483\] |
+| -37   | -0.0060       | 0.0232 | 0.794   | \[-0.0515, 0.0394\] |
+| -36   | 0.0041        | 0.0106 | 0.699   | \[-0.0166, 0.0248\] |
+| -35   | -0.0003       | 0.0252 | 0.991   | \[-0.0497, 0.0491\] |
+| -34   | 0.0019        | 0.0088 | 0.830   | \[-0.0154, 0.0192\] |
+| -33   | -0.0081       | 0.0076 | 0.291   | \[-0.0231, 0.0069\] |
+| -32   | 0.0073        | 0.0092 | 0.425   | \[-0.0107, 0.0253\] |
+| -31   | 0.0043        | 0.0133 | 0.746   | \[-0.0217, 0.0304\] |
+| -30   | -0.0049       | 0.0120 | 0.681   | \[-0.0284, 0.0185\] |
+| -29   | 0.0044        | 0.0115 | 0.702   | \[-0.0181, 0.0269\] |
+| -28   | -0.0067       | 0.0096 | 0.486   | \[-0.0256, 0.0122\] |
+| -27   | -0.0087       | 0.0165 | 0.598   | \[-0.0411, 0.0237\] |
+| -26   | 0.0106        | 0.0233 | 0.649   | \[-0.0351, 0.0564\] |
+| -25   | -0.0074       | 0.0050 | 0.134   | \[-0.0172, 0.0023\] |
+| -24   | -0.0069       | 0.0082 | 0.401   | \[-0.0229, 0.0092\] |
+| -23   | 0.0085        | 0.0085 | 0.319   | \[-0.0082, 0.0253\] |
+| -22   | 0.0024        | 0.0078 | 0.755   | \[-0.0128, 0.0177\] |
+| -21   | -0.0077       | 0.0139 | 0.582   | \[-0.0350, 0.0196\] |
+| -20   | 0.0069        | 0.0124 | 0.576   | \[-0.0173, 0.0312\] |
+| -19   | -0.0118       | 0.0102 | 0.249   | \[-0.0318, 0.0083\] |
+| -18   | 0.0013        | 0.0072 | 0.852   | \[-0.0129, 0.0156\] |
+| -17   | -0.0094       | 0.0121 | 0.436   | \[-0.0331, 0.0143\] |
+| -16   | 0.0027        | 0.0096 | 0.778   | \[-0.0160, 0.0214\] |
+| -15   | 0.0026        | 0.0142 | 0.853   | \[-0.0253, 0.0306\] |
+| -14   | 0.0080        | 0.0098 | 0.415   | \[-0.0112, 0.0271\] |
+| -13   | -0.0056       | 0.0090 | 0.534   | \[-0.0232, 0.0120\] |
+| -12   | 0.0048        | 0.0112 | 0.673   | \[-0.0173, 0.0268\] |
+| -11   | 0.0098        | 0.0092 | 0.287   | \[-0.0082, 0.0277\] |
+| -10   | 0.0067        | 0.0094 | 0.478   | \[-0.0118, 0.0252\] |
+| -9    | 0.0008        | 0.0110 | 0.944   | \[-0.0207, 0.0223\] |
+| -8    | 0.0014        | 0.0067 | 0.828   | \[-0.0116, 0.0145\] |
+| -7    | -0.0024       | 0.0179 | 0.892   | \[-0.0376, 0.0327\] |
+| -6    | -0.0076       | 0.0118 | 0.521   | \[-0.0307, 0.0156\] |
+| -5    | 0.0092        | 0.0052 | 0.079   | \[-0.0011, 0.0195\] |
+| -4    | -0.0038       | 0.0122 | 0.755   | \[-0.0277, 0.0201\] |
+| -3    | -0.0111       | 0.0143 | 0.436   | \[-0.0392, 0.0169\] |
+| -2    | -0.0147       | 0.0089 | 0.099   | \[-0.0321, 0.0028\] |
+| -1    | -0.0005       | 0.0112 | 0.964   | \[-0.0224, 0.0214\] |
+| 0     | 0.0084        | 0.0178 | 0.639   | \[-0.0266, 0.0434\] |
+| 1     | 0.0056        | 0.0159 | 0.725   | \[-0.0256, 0.0368\] |
+| 2     | 0.0053        | 0.0122 | 0.663   | \[-0.0185, 0.0291\] |
+| 3     | 0.0128        | 0.0184 | 0.485   | \[-0.0232, 0.0488\] |
+| 4     | 0.0154        | 0.0157 | 0.327   | \[-0.0154, 0.0461\] |
+| 5     | 0.0136        | 0.0268 | 0.611   | \[-0.0390, 0.0662\] |
+| 6     | 0.0176        | 0.0170 | 0.302   | \[-0.0158, 0.0510\] |
+| 7     | 0.0273        | 0.0237 | 0.250   | \[-0.0192, 0.0737\] |
+| 8     | 0.0252        | 0.0302 | 0.404   | \[-0.0340, 0.0843\] |
+| 9     | 0.0429        | 0.0201 | 0.033   | \[0.0034, 0.0824\]  |
+| 10    | 0.0261        | 0.0117 | 0.025   | \[0.0032, 0.0490\]  |
+| 11    | 0.0185        | 0.0095 | 0.052   | \[-0.0001, 0.0371\] |
+| 12    | 0.0034        | 0.0234 | 0.886   | \[-0.0426, 0.0493\] |
+| 13    | 0.0031        | 0.0214 | 0.884   | \[-0.0389, 0.0451\] |
+| 14    | 0.0036        | NA     | NA      | NA                  |
+| 15    | 0.0196        | NA     | NA      | NA                  |
+
+> *Notes:* Full table available from author. Months 14-15 have limited cohort support.

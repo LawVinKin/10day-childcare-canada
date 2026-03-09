@@ -1,101 +1,84 @@
-# In this script, we will clean and combine monthly Labour Force Survey (LFS) data files
-# to create a single dataset focused on maternal labour force participation and occupation codes
+# This script cleans the combined raw labour force survey data, creating analysis-ready variables and applying sample restrictions.
+# It handles differences in variable names (namely for the sex/gender variable) across survey years and ensures all variables are in a consistent format for analysis.
 
 library(tidyverse)
-library(haven) # for reading .RData files
+library(haven)
 
-setwd("..") # set your own working directory here
+# Load combined raw data
+load("data/01-raw_data/lfs_all_months_combined.RData")
 
-# the following code lists all LFS .RData files in the raw data directory and processes them
-lfs_files <- list.files("data/01-raw_data/raw", pattern = "^LFS_.*\\.RData$", full.names = TRUE)
-
-# the following function identifies the correct variable name, since across the years, the wording
-# of the variable has changed between "GENDER" and "SEX". 
-get_sex_var_name <- function(table) {
-  if ("GENDER" %in% names(table)) {
-    "GENDER"
-  } else if ("SEX" %in% names(table)) {
-    "SEX"
-  } else {
-    NA
+## We need a single numeric sex code.
+## Older waves use SEX (1/2), later waves use GENDER (1/2).  We'll prefer
+## whichever column has the fewest missing values, and fall back to the other.
+get_sex_var <- function(data) {
+  has_sex <- "SEX" %in% names(data)
+  has_gender <- "GENDER" %in% names(data)
+  if (has_sex && has_gender) {
+    n_sex <- sum(!is.na(data$SEX))
+    n_gen <- sum(!is.na(data$GENDER))
+    if (n_gen > n_sex) return("GENDER") else return("SEX")
   }
-}
- # the following function extracts occupation-related fields, handling different naming conventions
- # with the same basic logic that we used for the sex and gender variables
-extract_occupation_fields <- function(table) {
-  # as the aforementioned states, the following three lines extract occupation codes that
-  # are needed for our work-from-home analysis. We are using these occupation codes as proxies
-  # for possibilities of working from home.
-  occ_code <- if ("NOC_10" %in% names(table)) as.character(as_factor(table$NOC_10))
-  else if ("NOC_43" %in% names(table)) as.character(as_factor(table$NOC_43))
-  else NA_character_
-# the following two lines extract occupation major groups (similar to 2-digit codes)
-# that we will use for certain subgroup analyses. 
-  occ_major <- if ("OCC_MAJ" %in% names(table)) as.character(as_factor(table$OCC_MAJ))
-  else if ("OCC_MAJ_2016" %in% names(table)) as.character(as_factor(table$OCC_MAJ_2016))
-  else NA_character_
-  list(occ_code = occ_code, occ_major = occ_major) # finally, we list the extracted fields
+  if (has_gender) return("GENDER")
+  if (has_sex) return("SEX")
+  return(NA_character_)
 }
 
-# the following function cleans the LFS data for a single month based on our inclusion criteria
-# and the relevant variables for our analysis. 
-clean_lfs_data <- function(table, sex_var_name) {
-  table %>%
-    mutate(
-      sex_n = as.numeric(.data[[sex_var_name]]),
-      agyownk_n = as.numeric(AGYOWNK), # indicator for having own children in household
-      age_12_n = as.numeric(AGE_12), # age of youngest child in household
-      lfsstat_n = as.numeric(LFSSTAT), # labour force status
-      prov_n = as.numeric(PROV), # province code
-      date = as.Date(paste(SURVYEAR, SURVMNTH, "01", sep = "-"))) %>% # we create a date variable
-    filter(
-      sex_n == 2, # female
-      !is.na(agyownk_n), # exclude missing agyownk
-      agyownk_n == 1, # has own children
-      age_12_n >= 3, age_12_n <= 6) # youngest child aged 3-6 (inclusive)
-}
+sex_var <- get_sex_var(combined)
 
-# the following function selects and finalizes the relevant variables for analysis
-# including creating the in_lfp variable based on lfsstat
-select_and_finalize <- function(df, occ_fields) {
-  df %>%
-    mutate(
-      occ_code = occ_fields$occ_code,
-      occ_major = occ_fields$occ_major
-    ) %>%
-    select(
-      prov = prov_n,
-      lfsstat = lfsstat_n,
-      weight = FINALWT,
-      date,
-      age_12 = age_12_n,
-      marstat = MARSTAT,
-      educ = EDUC,
-      efamtype = EFAMTYPE,
-      immig = IMMIG,
-      schooln = SCHOOLN,
-      occ_code,
-      occ_major) %>%
-    mutate(
-      in_lfp = if_else(lfsstat %in% c(1, 2, 3), 1, 0)) # in_lfp: 1 if employed, unemployed, or on layoff; 0 otherwise
-}
+# Convert labelled variables to numeric
+combined <- combined %>%
+  mutate(across(where(haven::is.labelled), as.numeric))
 
-# this function cleans a single LFS .RData file and returns the cleaned dataframe
-# and we will use it in a loop to process all files and combine them together
-clean_one_month <- function(file_path) {
-  load(file_path)
-  loaded_object_name <- ls()[length(ls())]
-  table <- get(loaded_object_name)
-  
-  sex_var_name <- get_sex_var_name(table)
-  df_clean <- clean_lfs_data(table, sex_var_name)
-  occ_fields <- extract_occupation_fields(df_clean)
-  
-  df_clean <- select_and_finalize(df_clean, occ_fields)
-  
-  df_clean
-}
+# Create analysis variables
+combined <- combined %>%
+  mutate(
+    sex_n = as.numeric(.data[[sex_var]]),
+    age_youngest_child = as.numeric(AGYOWNK),
+    age_12_n = as.numeric(AGE_12),
+    lfsstat_n = as.numeric(LFSSTAT),
+    prov_n = as.numeric(PROV),
+    date = as.Date(paste(SURVYEAR, SURVMNTH, "01", sep = "-"))
+  )
 
-lfs_all <- map_dfr(lfs_files, clean_one_month, .id = NULL)
+# Apply sample restrictions (females, youngest child under 6, age 25-44)
+combined <- combined %>%
+  filter(
+    sex_n == 2,
+    !is.na(age_youngest_child),
+    age_youngest_child == 1,
+    age_12_n >= 3 & age_12_n <= 6
+  )
 
-write_rds(lfs_all, "data/02-processed/lfs_clean.rds")
+# Select and rename final variables
+cleaned <- combined %>%
+  transmute( # the transmute function both selects and renames variables in one step
+    prov = prov_n,
+    date = date,
+    lfsstat = lfsstat_n,
+    weight = FINALWT,
+    age_12 = age_12_n,
+    marstat = MARSTAT,
+    educ = EDUC,
+    efamtype = EFAMTYPE,
+    immig = IMMIG,
+    schooln = SCHOOLN,
+    ftptmain = FTPTMAIN,
+    uhrsmain = UHRSMAIN,
+    utothrs = UTOTHRS,
+    hrlyearn = HRLYEARN,
+    cowmain = COWMAIN
+  ) %>%
+  mutate( # the if_else function is a vectorized version of if-else statements,
+          # allowing us to create new binary variables based on conditions
+    in_lfp = if_else(lfsstat %in% c(1, 2, 3), 1L, 0L), 
+    in_employed = if_else(lfsstat %in% c(1, 2), 1L, 0L),
+    in_ft_employed = if_else(ftptmain == 1, 1L, 0L),
+    in_pt_employed = if_else(ftptmain == 2, 1L, 0L),
+    hours_usual = as.numeric(uhrsmain) / 10,
+    hours_total = as.numeric(utothrs) / 10,
+    earnings_hourly = as.numeric(hrlyearn) / 100
+  )
+
+# Save cleaned data
+dir.create("data/02-processed", showWarnings = FALSE, recursive = TRUE)
+saveRDS(cleaned, "data/02-processed/lfs_clean.rds")
