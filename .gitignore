@@ -42,9 +42,5 @@ data/03-analysis_data/**/*.rds
 data/01-raw_data/lfs_all_months_combined.RData
 data/01-raw_data/archive_reference_only/
 
-# Paper build artifacts
-paper/*.pdf
-paper/figures_highres/*.pdf
-
 # Archive old drafts
 paper/archive_old_drafts/
