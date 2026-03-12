@@ -4,7 +4,7 @@ subtitle: "Policy Impact on Maternal Employment"
 author:
   - Lawrence Vincent King
 affiliation: "Munk School of Global Affairs and Public Policy, University of Toronto"
-thanks: "I hereby thank Professor Lauren Jones for their guidance of this project, and Professor Christopher Greenaway for their invaluable feedback in various aspects of this project, as well as their everpresent mentorship. No ethics approval was required for this research as the data used are restricted to publicly available secondary data. The author declares no conflicts of interest. No funding was received for this project. Project code is available at: https://github.com/LawVinKin/CanadaChildcareMaternalLabour."
+thanks: "I hereby thank Professor Lauren Jones for their guidance of this project, and Professor Christopher Greenaway for their invaluable feedback in various aspects of this project, as well as their everpresent mentorship. No ethics approval was required for this research as the data used are restricted to publicly available secondary data. The author declares no conflicts of interest. No funding was received for this project. Project code is available at: https://github.com/LawVinKin/10day-childcare-canada."
 date: today
 date-format: long
 abstract: |
